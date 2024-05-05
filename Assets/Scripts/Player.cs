@@ -60,9 +60,24 @@ public class Player : BoardElement
     #region DEBUG
     private void OnGUI()
     {
-        if (GUI.Button(new Rect(0,0,200,200), "Dash left"))
+        if (GUI.Button(new Rect(0,0,200,100), "Dash left"))
         {
             Dash(new Vector2Int(-1, 0));
+        }
+
+        if (GUI.Button(new Rect(0, 200, 200, 100), "Dash right"))
+        {
+            Dash(new Vector2Int(1, 0));
+        }
+
+        if (GUI.Button(new Rect(0, 400, 200, 100), "Dash top"))
+        {
+            Dash(new Vector2Int(0, 1));
+        }
+
+        if (GUI.Button(new Rect(0, 600, 200, 100), "Dash bottom"))
+        {
+            Dash(new Vector2Int(0, -1));
         }
     }
     #endregion

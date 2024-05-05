@@ -10,7 +10,9 @@ public class GameManager : MonoBehaviour
     private Vector2Int m_PlayerStartPos;
     private bool [,] m_OccupationData;
 
+    [SerializeField]
     private int m_BoardSizeX;
+    [SerializeField]
     private int m_BoardSizeY;
 
     private void Start()
@@ -44,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     private void SetBoardElementPosition(BoardElement element, int x, int y)
     {
-        element.SetPosition(x - (m_BoardSizeX - 1) / 2, y - (m_BoardSizeY - 2) / 2);
+        element.SetPosition(x - (m_BoardSizeX + 2) / 2, y - (m_BoardSizeY + 2) / 2);
     }
 
     public bool IsPositionValid(int x, int y, bool isPlayer)
