@@ -19,7 +19,7 @@ public class CommonButtonHandler : Selectable, IPointerClickHandler, IEventSyste
     [SerializeField]
     private Image m_ButtonImage;
     [SerializeField]
-    private UnityAction m_OnClick;
+    private UnityEvent m_OnClick;
     [SerializeField]
     private AnimationCurve m_ObjectsCurve;
 
@@ -34,8 +34,7 @@ public class CommonButtonHandler : Selectable, IPointerClickHandler, IEventSyste
 
     public void OnPointerClick(PointerEventData _eventData)
     {
-        if (m_UpCoroutine == null)
-            m_OnClick?.Invoke();
+        m_OnClick?.Invoke();
     }
 
     public override void OnPointerDown(PointerEventData _eventData)

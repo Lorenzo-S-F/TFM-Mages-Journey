@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Player m_PlayerReference;
     [SerializeField]
+    private List<BoardElement> m_BoardElements;
+
+    [SerializeField]
     private Vector2Int m_PlayerStartPos;
     private bool [,] m_OccupationData;
 
@@ -14,28 +18,31 @@ public class GameManager : MonoBehaviour
     private int m_BoardSizeX;
     [SerializeField]
     private int m_BoardSizeY;
+    [SerializeField]
+    private bool m_AutoAimMode;
 
-    private void Start()
+    [SerializeField]
+    private bool m_AutoAimPanel;
+    [SerializeField]
+    private bool m_ManualAimPanel;
+
+    internal void InitializeGame(RoomDef room)
     {
-        BoardDefinition hardCodedDef = new BoardDefinition();
-
-        hardCodedDef.m_BoardElements = new BoardElement[9, 10];
-
-        Setup(hardCodedDef);
+        Setup(room);
     }
 
-    public void Setup(BoardDefinition _boardDefinition)
+    public void Setup(RoomDef boardDefinition)
     {
-        int m_BoardSizeX = _boardDefinition.m_BoardElements.GetLength(0);
-        int m_BoardSizeY = _boardDefinition.m_BoardElements.GetLength(1);
-
         InitializeBoardElement(m_PlayerReference, m_PlayerStartPos.x, m_PlayerStartPos.y);
-
         m_OccupationData = new bool[m_BoardSizeX, m_BoardSizeY];
 
-        for (int i = 0; i < m_BoardSizeX; ++i)
-            for (int j = 0; j < m_BoardSizeY; ++j)
-                m_OccupationData[i, j] = _boardDefinition.m_BoardElements[i, j] != null;
+        foreach (var entity in boardDefinition.m_BoardEntities)
+        {
+            if (entity.m_Type != RoomEntity.ENTITY_TYPE.OBSTACLE)
+                continue;
+
+            m_OccupationData[entity.m_Position.x, entity.m_Position.y] = true;
+        }
     }
 
     public void InitializeBoardElement(BoardElement element, int x, int y)
@@ -46,7 +53,7 @@ public class GameManager : MonoBehaviour
 
     private void SetBoardElementPosition(BoardElement element, int x, int y)
     {
-        element.SetPosition(x - (m_BoardSizeX + 2) / 2, y - (m_BoardSizeY + 2) / 2);
+        element.SetPosition(x - (m_BoardSizeX - 1) / 2, y - (m_BoardSizeY + 2) / 2);
     }
 
     public bool IsPositionValid(int x, int y, bool isPlayer)
@@ -64,11 +71,6 @@ public class GameManager : MonoBehaviour
             return false;
 
         return !m_OccupationData[x, y];
-    }
-
-    public class BoardDefinition
-    {
-        public BoardElement[,] m_BoardElements;
     }
 }
 

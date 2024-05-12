@@ -6,6 +6,8 @@ public class Player : BoardElement
 {
     [SerializeField]
     private float m_DashSpeed = 1;
+    [SerializeField]
+    private Transform m_Transform;
     private bool m_Dashing = false;
 
     #region INHERITED_METHODS
@@ -15,7 +17,7 @@ public class Player : BoardElement
 
     public override void SetPosition(int x, int y)
     {
-        transform.localPosition = new Vector3(x, y, 0);
+        m_Transform.localPosition = new Vector3(x, y, 0);
     }
 
     public override ELEMENT_TYPE GetElementType()
@@ -48,10 +50,10 @@ public class Player : BoardElement
             t += Time.deltaTime * m_DashSpeed;
 
             smoothValue = Mathf.SmoothStep(0, 1, t);
-            transform.position = startPosition + new Vector3(_direction.x * smoothValue, _direction.y * smoothValue, 0);
+            m_Transform.position = startPosition + new Vector3(_direction.x * smoothValue, _direction.y * smoothValue, 0);
         }
 
-        transform.position = startPosition + new Vector3(_direction.x, _direction.y, 0);
+        m_Transform.localPosition = startPosition + new Vector3(_direction.x, _direction.y, 0);
 
         m_Dashing = false;
     }
