@@ -6,10 +6,14 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    [SerializeField]
     private Player m_PlayerReference;
     private Vector2 m_StartDragPos;
     //private bool m_Dragging = false;
+
+    public void SetPlayer(Player player)
+    {
+        m_PlayerReference = player;
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {

@@ -8,12 +8,21 @@ public class Player : BoardElement
     private float m_DashSpeed = 1;
     [SerializeField]
     private Transform m_Transform;
+
     private bool m_Dashing = false;
+    private RoomEntity m_CurrentPlayerEntity;
 
     #region INHERITED_METHODS
     public override void Initialize()
     {
+
     }
+
+    public void InitializePlayer(Transform playerTransform, RoomEntity player)
+    {
+        m_CurrentPlayerEntity = player;
+        m_Transform = playerTransform;
+    }        
 
     public override void SetPosition(int x, int y)
     {
@@ -39,7 +48,7 @@ public class Player : BoardElement
 
         m_Dashing = true;
 
-        Vector3 startPosition = transform.position;
+        Vector3 startPosition = m_Transform.localPosition;
         float t = 0;
         float smoothValue;
 
@@ -50,7 +59,7 @@ public class Player : BoardElement
             t += Time.deltaTime * m_DashSpeed;
 
             smoothValue = Mathf.SmoothStep(0, 1, t);
-            m_Transform.position = startPosition + new Vector3(_direction.x * smoothValue, _direction.y * smoothValue, 0);
+            m_Transform.localPosition = startPosition + new Vector3(_direction.x * smoothValue, _direction.y * smoothValue, 0);
         }
 
         m_Transform.localPosition = startPosition + new Vector3(_direction.x, _direction.y, 0);

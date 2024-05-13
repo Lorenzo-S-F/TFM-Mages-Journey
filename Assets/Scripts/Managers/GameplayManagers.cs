@@ -12,7 +12,9 @@ public class GameplayManagers : Singleton<GameplayManagers>
     public IEnumerator Initialize()
     {
         m_LevelManager.GenerateLevel();
-        m_GameManager.InitializeGame(m_LevelManager.GetRoom(0));
+        (RoomManager room, LevelManager.MapNode node) = m_LevelManager.GetRoom(0);
+        RoomEntity player = m_LevelManager.GetPlayerBase(0);
+        m_GameManager.InitializeGame(room, node, player);
         yield return null;
     }
 }

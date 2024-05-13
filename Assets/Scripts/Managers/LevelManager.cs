@@ -6,17 +6,23 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public List<Pair<int, RoomDef>> m_EnemyRooms;
-    public List<Pair<int, RoomDef>> m_ShopRooms;
-    public List<Pair<int, RoomDef>> m_ItemRooms;
-    public List<Pair<int, RoomDef>> m_BossRoom;
+    public List<Pair<int, RoomEntity>> m_AvaliablePlayers;
+    public List<Pair<int, RoomManager>> m_EnemyRooms;
+    public List<Pair<int, RoomManager>> m_ShopRooms;
+    public List<Pair<int, RoomManager>> m_ItemRooms;
+    public List<Pair<int, RoomManager>> m_BossRoom;
     public GenerationSpecs m_GenerationSpecs;
+
+    internal RoomEntity GetPlayerBase(int index)
+    {
+        return m_AvaliablePlayers[index].Value;
+    }
 
     public int m_MapSizeX;
     public int m_MapSizeY;
 
     public MapNode[,] m_Map;
-    private int m_CurrentGameLayer = -1;
+    private int m_CurrentGameLayer = 0;
     private int m_CurrentGameWorld = 0;
 
     public void GenerateLevel()
@@ -39,11 +45,11 @@ public class LevelManager : MonoBehaviour
         {
             int x = RandomNumberGenerator.GetInt32(0, m_MapSizeX);
             int y = RandomNumberGenerator.GetInt32(1, m_MapSizeY - 1);
-
             if (m_Map[x,y] == null)
             {
                 MapNode newNode = new MapNode();
-                newNode.m_RoomType = MapNode.ROOM_TYPE.ITEM;
+                newNode.m_Rarity = m_GenerationSpecs.GetRandomRarity();
+                newNode.m_RoomType = MapNode.ROOM_TYPE.ENEMY;
                 m_Map[x, y] = newNode;
                 generated++;
             }
@@ -59,7 +65,8 @@ public class LevelManager : MonoBehaviour
             if (m_Map[x, y] == null)
             {
                 MapNode newNode = new MapNode();
-                newNode.m_RoomType = MapNode.ROOM_TYPE.SHOP;
+                newNode.m_Rarity = m_GenerationSpecs.GetRandomRarity();
+                newNode.m_RoomType = MapNode.ROOM_TYPE.ENEMY;
                 m_Map[x, y] = newNode;
                 generated++;
             }
@@ -78,6 +85,7 @@ public class LevelManager : MonoBehaviour
                 {
                     MapNode newNode = new MapNode();
                     newNode.m_PrevNodes.Add(prev);
+                    newNode.m_Rarity = m_GenerationSpecs.GetRandomRarity();
                     newNode.m_RoomType = m_GenerationSpecs.GetRandomRoom();
                     m_Map[i, j] = newNode;
                 }
@@ -106,7 +114,7 @@ public class LevelManager : MonoBehaviour
 #endif
     }
 
-    public RoomDef GetRoom(int room)
+    public (RoomManager, MapNode) GetRoom(int room)
     {
         m_CurrentGameLayer++;
         for (int i = 0; i < m_Map.GetLength(0); ++i)
@@ -116,7 +124,7 @@ public class LevelManager : MonoBehaviour
 
             if (m_Map[i, m_CurrentGameLayer] != null && room == 0)
             {
-                List<Pair<int, RoomDef>> rooms = new List<Pair<int, RoomDef>>();
+                List<Pair<int, RoomManager>> rooms = new List<Pair<int, RoomManager>>();
                 switch (m_Map[i, m_CurrentGameLayer].m_RoomType)
                 {
                     case MapNode.ROOM_TYPE.SHOP:
@@ -134,13 +142,14 @@ public class LevelManager : MonoBehaviour
                     case MapNode.ROOM_TYPE.START:
                         break;
                 }
-                return rooms[RandomNumberGenerator.GetInt32(0, rooms.Count)].Value;
+
+                return (rooms[RandomNumberGenerator.GetInt32(0, rooms.Count)].Value, m_Map[i, m_CurrentGameLayer]);
             }
 
             room--;
         }
 
-        return null;
+        return (null, null);
     }
 
     public List<MapNode> GetNextLayerMapNodes()
@@ -168,9 +177,12 @@ public class LevelManager : MonoBehaviour
         [Range(0,1)]
         public float m_RoomProbability;
         public List<Pair<MapNode.ROOM_TYPE, float>> m_Probabilities;
+        public List<Pair<MapNode.RARITY, float>> m_RarityProbabilities;
 
         public MapNode.ROOM_TYPE GetRandomRoom()
         {
+            return MapNode.ROOM_TYPE.ENEMY;
+
             float total = 0;
             for (int i = 0; i < m_Probabilities.Count; ++i)
             {
@@ -198,6 +210,28 @@ public class LevelManager : MonoBehaviour
 
             return false;
         }
+
+        internal MapNode.RARITY GetRandomRarity()
+        {
+            float total = 0;
+            for (int i = 0; i < m_RarityProbabilities.Count; ++i)
+            {
+                total += m_RarityProbabilities[i].Value;
+            }
+
+            float random = RandomNumberGenerator.GetInt32(int.MaxValue) / (float)int.MaxValue;
+            random *= total;
+
+            for (int i = 0; i < m_RarityProbabilities.Count; ++i)
+            {
+                if (random > m_RarityProbabilities[i].Value)
+                    random -= m_RarityProbabilities[i].Value;
+                else
+                    return m_RarityProbabilities[i].Key;
+            }
+
+            return MapNode.RARITY.UNDEFINED;
+        }
     }
 
     [Serializable]
@@ -211,6 +245,16 @@ public class LevelManager : MonoBehaviour
     {
         public List<MapNode> m_PrevNodes = new List<MapNode>();
         public ROOM_TYPE m_RoomType = ROOM_TYPE.UNDEFINED;
+        public RARITY m_Rarity = RARITY.UNDEFINED;
+
+        public enum RARITY
+        {
+            UNDEFINED,
+            EASY,
+            MEDIUM,
+            HARD
+        }
+
         public enum ROOM_TYPE
         {
             UNDEFINED,

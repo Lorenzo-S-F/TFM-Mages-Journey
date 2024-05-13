@@ -6,13 +6,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private Player m_PlayerReference;
-    [SerializeField]
     private List<BoardElement> m_BoardElements;
 
-    [SerializeField]
-    private Vector2Int m_PlayerStartPos;
     private bool [,] m_OccupationData;
+
+    [SerializeField]
+    private PlayerController m_PlayerController;
 
     [SerializeField]
     private int m_BoardSizeX;
@@ -26,23 +25,38 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private bool m_ManualAimPanel;
 
-    internal void InitializeGame(RoomDef room)
+    [SerializeField]
+    private Player m_PlayerBase;
+    private RoomManager m_CurrentRoom;
+
+    internal void InitializeGame(RoomManager room, LevelManager.MapNode node, RoomEntity player)
     {
-        Setup(room);
+        RoomManager.ValidEncounter encounter = room.GetEncounter(node.m_Rarity);
+        SetupRoom(room, player, encounter);
+        SetupEncounter(encounter);
     }
 
-    public void Setup(RoomDef boardDefinition)
+    private void SetupEncounter(RoomManager.ValidEncounter encounter)
     {
-        InitializeBoardElement(m_PlayerReference, m_PlayerStartPos.x, m_PlayerStartPos.y);
-        m_OccupationData = new bool[m_BoardSizeX, m_BoardSizeY];
+        //throw new NotImplementedException();
+    }
 
-        foreach (var entity in boardDefinition.m_BoardEntities)
-        {
-            if (entity.m_Type != RoomEntity.ENTITY_TYPE.OBSTACLE)
-                continue;
+    public void SetupRoom(RoomManager roomManager, RoomEntity player, RoomManager.ValidEncounter encounter)
+    {
+        m_CurrentRoom = Instantiate(roomManager);
+        player.m_Position = encounter.m_PlayerInitialState;
 
-            m_OccupationData[entity.m_Position.x, entity.m_Position.y] = true;
-        }
+        GameObject playerObject = Instantiate(player.m_EntityGameObject, m_CurrentRoom.GetPlayerTransform());
+        playerObject.transform.SetParent(m_CurrentRoom.GetPlayerTransform());
+
+        m_PlayerBase.InitializePlayer(playerObject.transform, player);
+        m_PlayerController.SetPlayer(m_PlayerBase);
+        SetBoardElementPosition(m_PlayerBase, player.m_Position.x, player.m_Position.y);
+    }
+
+    private IEnumerator DelayedSetup(RoomManager room)
+    {
+        yield return null;
     }
 
     public void InitializeBoardElement(BoardElement element, int x, int y)

@@ -4,15 +4,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Room", menuName = "GameAssets/RoomDef", order = 0)]
-public class RoomDef : ScriptableObject
-{
-    public int m_BoardSizeX;
-    public int m_BoardSizeY;
-
-    public List<RoomEntity> m_BoardEntities;
-}
-
 [Serializable]
 public class RoomEntity
 {
