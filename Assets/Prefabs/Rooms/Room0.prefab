@@ -80,7 +80,13 @@ MonoBehaviour:
   m_AvaliablePositions:
   - m_PlayerInitialState: {x: 0, y: 0}
     m_EncounterRarity: 1
-    m_RoomEnemies: []
+    m_RoomEnemies:
+    - m_EnemyData:
+        m_EntityGameObject: {fileID: 7742341187413574814, guid: 6d679c22343857c439300683ad80ad6e, type: 3}
+        m_Position: {x: 3, y: 3}
+        m_Entity: {fileID: 11400000, guid: a9d6031a5958e194c9152b77857250ce, type: 2}
+        m_Type: 2
+      m_StartPosition: {x: 3, y: 3}
   m_PlayerTransform: {fileID: 2817159696063295656}
   m_GridTransform: {fileID: 2817159696063295656}
 --- !u!1 &6912272259619003422

@@ -9,10 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a89f135b18a1b54b90879e9ecf08c82, type: 3}
-  m_Name: Room_1
+  m_Script: {fileID: 11500000, guid: b93e0150f2cab7f46a1b5f8268704ab5, type: 3}
+  m_Name: SlimeEasy
   m_EditorClassIdentifier: 
-  m_BoardEntities:
-  - m_EntityGameObject: {fileID: 0}
-    m_Position: {x: 0, y: 0}
-    m_Entity: {fileID: 0}
+  m_AttackData: []
+  m_MoveRate: 0
+  m_AttackRate: 0
+  m_IdleRate: 0
+  m_EntityStats:
+    m_HP: 0
+    m_Damage: 0
+    m_Speed: 0
+    m_ShotSpeed: 0
+    m_AttackSpeed: 0

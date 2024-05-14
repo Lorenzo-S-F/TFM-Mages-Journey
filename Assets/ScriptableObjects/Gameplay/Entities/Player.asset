@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: b93e0150f2cab7f46a1b5f8268704ab5, type: 3}
   m_Name: Player
-  m_EditorClassIdentifier: Assembly-CSharp::Entity
+  m_EditorClassIdentifier: 
   m_AttackData: []
   m_MoveRate: 0
   m_AttackRate: 0

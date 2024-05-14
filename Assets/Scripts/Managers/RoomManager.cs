@@ -53,7 +53,7 @@ public class RoomManager : MonoBehaviour
         public class MapEnemy
         {
             public RoomEntity m_EnemyData;
-            public Vector2Int m_EnemyStartPosition;
+            public Vector2Int m_StartPosition;
         }
     }
 }

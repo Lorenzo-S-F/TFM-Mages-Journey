@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
     public void OnEndDrag(PointerEventData eventData)
     {
         Vector2 endDragPos = eventData.position;
-        Debug.Log(Vector2.Distance(endDragPos, m_StartDragPos));
 
         if (true)
         {

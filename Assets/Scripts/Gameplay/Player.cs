@@ -11,16 +11,26 @@ public class Player : BoardElement
 
     private bool m_Dashing = false;
     private RoomEntity m_CurrentPlayerEntity;
+    private GameManager m_GameManager;
 
-    #region INHERITED_METHODS
-    public override void Initialize()
+    private void Awake()
     {
-
+        m_GameManager = GameplayManagers.Instance.m_GameManager;
     }
 
-    public void InitializePlayer(Transform playerTransform, RoomEntity player)
+    #region INHERITED_METHODS
+    public override void Initialize(RoomEntity entity)
     {
-        m_CurrentPlayerEntity = player;
+        m_CurrentPlayerEntity = entity;
+    }
+
+    public override Vector2Int GetPosition()
+    {
+        return m_CurrentPlayerEntity.m_Position;
+    }
+
+    public void InitializeTransform(Transform playerTransform)
+    {
         m_Transform = playerTransform;
     }        
 
@@ -38,7 +48,11 @@ public class Player : BoardElement
     #region PLAYER_ACTIONS
     public void Dash(Vector2Int _direction)
     {
-        StartCoroutine(DashCoroutine(_direction));
+        Vector2Int expectedDirection = m_CurrentPlayerEntity.m_Position + _direction;
+        if (m_GameManager.IsValidPosition(expectedDirection.x, expectedDirection.y))
+        {
+            StartCoroutine(DashCoroutine(_direction));
+        }
     }
 
     private IEnumerator DashCoroutine(Vector2Int _direction)
@@ -46,6 +60,7 @@ public class Player : BoardElement
         if (m_Dashing)
             yield break;
 
+        m_CurrentPlayerEntity.m_Position += _direction;
         m_Dashing = true;
 
         Vector3 startPosition = m_Transform.localPosition;

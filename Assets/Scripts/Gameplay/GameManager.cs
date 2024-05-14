@@ -31,9 +31,22 @@ public class GameManager : MonoBehaviour
 
     internal void InitializeGame(RoomManager room, LevelManager.MapNode node, RoomEntity player)
     {
+        m_BoardSizeX = room.GetRoomSize().x;
+        m_BoardSizeY = room.GetRoomSize().y;
+
+        m_OccupationData = new bool[m_BoardSizeX, m_BoardSizeY];
+
         RoomManager.ValidEncounter encounter = room.GetEncounter(node.m_Rarity);
         SetupRoom(room, player, encounter);
         SetupEncounter(encounter);
+    }
+
+    public bool IsValidPosition(int x, int y)
+    {
+        if (x < 0 || x >= m_BoardSizeX || y < 0 || y >= m_BoardSizeY || m_OccupationData[x, y] || m_BoardElements.FindIndex(element => (element.GetPosition().x == x && element.GetPosition().y == y)) != -1)
+            return false;
+
+        return true;
     }
 
     private void SetupEncounter(RoomManager.ValidEncounter encounter)
@@ -44,24 +57,26 @@ public class GameManager : MonoBehaviour
     public void SetupRoom(RoomManager roomManager, RoomEntity player, RoomManager.ValidEncounter encounter)
     {
         m_CurrentRoom = Instantiate(roomManager);
-        player.m_Position = encounter.m_PlayerInitialState;
 
         GameObject playerObject = Instantiate(player.m_EntityGameObject, m_CurrentRoom.GetPlayerTransform());
         playerObject.transform.SetParent(m_CurrentRoom.GetPlayerTransform());
 
-        m_PlayerBase.InitializePlayer(playerObject.transform, player);
+        m_PlayerBase.InitializeTransform(playerObject.transform);
         m_PlayerController.SetPlayer(m_PlayerBase);
-        SetBoardElementPosition(m_PlayerBase, player.m_Position.x, player.m_Position.y);
+        InitializeBoardElement(m_PlayerBase, encounter.m_PlayerInitialState.x, encounter.m_PlayerInitialState.y, player);
+
+        foreach(var entity in encounter.m_RoomEnemies)
+        {
+            Enemy enemy = Instantiate(entity.m_EnemyData.m_EntityGameObject, m_CurrentRoom.GetGridTransform()).GetComponent<Enemy>();
+            InitializeBoardElement(enemy, entity.m_StartPosition.x, entity.m_StartPosition.y, entity.m_EnemyData);
+        }
     }
 
-    private IEnumerator DelayedSetup(RoomManager room)
+    public void InitializeBoardElement(BoardElement element, int x, int y, RoomEntity entity)
     {
-        yield return null;
-    }
-
-    public void InitializeBoardElement(BoardElement element, int x, int y)
-    {
-        element.Initialize();
+        m_BoardElements.Add(element);
+        entity.m_Position = new Vector2Int(x, y);
+        element.Initialize(entity);
         SetBoardElementPosition(element, x, y);
     }
 
@@ -98,7 +113,8 @@ public abstract class BoardElement : MonoBehaviour
         OBSTACLE
     }
 
-    public abstract void Initialize();
+    public abstract void Initialize(RoomEntity entity);
     public abstract void SetPosition(int x, int y);
+    public abstract Vector2Int GetPosition();
     public abstract ELEMENT_TYPE GetElementType();
 }
