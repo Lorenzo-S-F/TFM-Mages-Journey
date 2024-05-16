@@ -10,6 +10,7 @@ public class Player : BoardElement
     private Transform m_Transform;
 
     private bool m_Dashing = false;
+    private Coroutine m_DashCoroutine;
     private RoomEntity m_CurrentPlayerEntity;
     private GameManager m_GameManager;
 
@@ -41,6 +42,12 @@ public class Player : BoardElement
 
     public override void SetPosition(int x, int y)
     {
+        if (m_DashCoroutine != null)
+        {
+            StopCoroutine(m_DashCoroutine);
+            m_DashCoroutine = null;
+            m_Dashing = false;
+        }
         m_Transform.localPosition = new Vector3(x, y, 0);
     }
 
@@ -54,8 +61,11 @@ public class Player : BoardElement
 
     public void Shoot()
     {
+        if (m_Dashing || m_Transform == null)
+            return;
+
         Vector2Int dir = m_GameManager.GetMostAlignedDirection(this);
-        GameObject attack = Instantiate(m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_AttackType.m_Projectile);
+        GameObject attack = Instantiate(m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_AttackType.m_Projectile, GameplayManagers.Instance.m_GameManager.m_ProjectilesTransform);
         attack.transform.localPosition = m_Transform.position;
         attack.GetComponent<Attack>().Initialize(m_CurrentPlayerEntity.m_Entity.m_AttackData[0], dir, m_CurrentPlayerEntity.m_Entity.m_EntityStats, "Player");
     }
@@ -65,7 +75,7 @@ public class Player : BoardElement
         Vector2Int expectedDirection = m_CurrentPlayerEntity.m_Position + _direction;
         if (m_GameManager.IsValidPosition(expectedDirection.x, expectedDirection.y))
         {
-            StartCoroutine(DashCoroutine(_direction));
+            m_DashCoroutine = StartCoroutine(DashCoroutine(_direction));
         }
     }
 
@@ -93,6 +103,7 @@ public class Player : BoardElement
 
         m_Transform.localPosition = startPosition + new Vector3(_direction.x, _direction.y, 0);
 
+        m_DashCoroutine = null;
         m_Dashing = false;
     }
 

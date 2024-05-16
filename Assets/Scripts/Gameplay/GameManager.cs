@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PlayerController m_PlayerController;
 
+    public Transform m_ProjectilesTransform;
+    public Transform m_BoardTransform;
+
     [SerializeField]
     private int m_BoardSizeX;
     [SerializeField]
@@ -54,6 +57,11 @@ public class GameManager : MonoBehaviour
 
     internal void InitializeGame(RoomManager room, LevelManager.MapNode node, RoomEntity player)
     {
+        foreach(Transform projectile in m_ProjectilesTransform)
+        {
+            Destroy(projectile.gameObject);
+        }
+
         m_BoardElements.Clear();
 
         m_BoardSizeX = room.GetRoomSize().x;
@@ -97,24 +105,16 @@ public class GameManager : MonoBehaviour
         if (Math.Abs(dir.x) > Math.Abs(dir.y))
         {
             if (dir.x > 0)
-            {
                 return new Vector2Int(1, 0);
-            }
             else
-            {
                 return new Vector2Int(-1, 0);
-            }
         }
         else
         {
             if (dir.y > 0)
-            {
                 return new Vector2Int(0, 1);
-            }
             else
-            {
                 return new Vector2Int(0, -1);
-            }
         }
     }
 
@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
 
     public void SetupRoom(RoomManager roomManager, RoomEntity player, RoomManager.ValidEncounter encounter)
     {
-        m_CurrentRoom = Instantiate(roomManager, transform.parent.parent);
+        m_CurrentRoom = Instantiate(roomManager, transform.parent.parent, GameplayManagers.Instance.m_GameManager.m_BoardTransform);
 
         GameObject playerObject = Instantiate(player.m_EntityGameObject, m_CurrentRoom.GetPlayerTransform());
         playerObject.transform.SetParent(m_CurrentRoom.GetPlayerTransform());
