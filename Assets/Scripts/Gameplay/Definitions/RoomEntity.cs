@@ -21,6 +21,16 @@ public class RoomEntity
         NPC,
         PLAYER
     }
+
+    public RoomEntity Duplicate()
+    {
+        RoomEntity roomEnt = new RoomEntity();
+        roomEnt.m_Entity = ScriptableObject.Instantiate(m_Entity);
+        roomEnt.m_EntityGameObject = m_EntityGameObject;
+        roomEnt.m_Position = m_Position;
+        roomEnt.m_Type = m_Type;
+        return roomEnt;
+    }
 }
 #region UNUSED
 /*public class GameGrid<T>

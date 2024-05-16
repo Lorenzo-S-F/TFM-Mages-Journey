@@ -13,8 +13,17 @@ public class GameplayManagers : Singleton<GameplayManagers>
     {
         m_LevelManager.GenerateLevel();
         (RoomManager room, LevelManager.MapNode node) = m_LevelManager.GetRoom(0);
-        RoomEntity player = m_LevelManager.GetPlayerBase(0);
+
+        RoomEntity player = m_LevelManager.GetPlayerBase(0).Duplicate();
+
         m_GameManager.InitializeGame(room, node, player);
+        yield return null;
+    }
+
+    public IEnumerator LoadNextRoom()
+    {
+        (RoomManager room, LevelManager.MapNode node) = m_LevelManager.GetRoom(0);
+        m_GameManager.InitializeGame(room, node, m_GameManager.GetPlayerEntity());
         yield return null;
     }
 }

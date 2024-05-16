@@ -18,6 +18,11 @@ public class Player : BoardElement
         m_GameManager = GameplayManagers.Instance.m_GameManager;
     }
 
+    public RoomEntity GetRoomEntity()
+    {
+        return m_CurrentPlayerEntity;
+    }
+
     #region INHERITED_METHODS
     public override void Initialize(RoomEntity entity)
     {
@@ -46,6 +51,15 @@ public class Player : BoardElement
     #endregion
 
     #region PLAYER_ACTIONS
+
+    public void Shoot()
+    {
+        Vector2Int dir = m_GameManager.GetMostAlignedDirection(this);
+        GameObject attack = Instantiate(m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_AttackType.m_Projectile);
+        attack.transform.localPosition = m_Transform.position;
+        attack.GetComponent<Attack>().Initialize(m_CurrentPlayerEntity.m_Entity.m_AttackData[0], dir, m_CurrentPlayerEntity.m_Entity.m_EntityStats, "Player");
+    }
+
     public void Dash(Vector2Int _direction)
     {
         Vector2Int expectedDirection = m_CurrentPlayerEntity.m_Position + _direction;
@@ -80,6 +94,15 @@ public class Player : BoardElement
         m_Transform.localPosition = startPosition + new Vector3(_direction.x, _direction.y, 0);
 
         m_Dashing = false;
+    }
+
+    public override void ApplyDamage(float damage)
+    {
+        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP -= damage;
+        if (m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
     #endregion
 

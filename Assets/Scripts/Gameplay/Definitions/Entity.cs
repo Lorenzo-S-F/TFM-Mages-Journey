@@ -16,7 +16,7 @@ public class Entity : ScriptableObject
 [Serializable]
 public class EntityStats
 {
-    public int m_HP;
+    public float m_HP;
     public int m_Damage;
     public int m_Speed;
     public int m_ShotSpeed;

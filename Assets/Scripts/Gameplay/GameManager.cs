@@ -25,12 +25,37 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private bool m_ManualAimPanel;
 
-    [SerializeField]
-    private Player m_PlayerBase;
+    public Player m_PlayerBase;
     private RoomManager m_CurrentRoom;
+    private bool m_RoomStarted = false;
+
+    private void Update()
+    {
+        if (m_RoomStarted)
+        {
+            int entity = m_BoardElements.FindIndex(x => x != null && x.GetElementType() == BoardElement.ELEMENT_TYPE.ENEMY);
+            if (entity == -1)
+            {
+                Destroy(m_CurrentRoom.gameObject);
+                m_CurrentRoom = null;
+                m_RoomStarted = false;
+                StartCoroutine(GameplayManagers.Instance.LoadNextRoom());
+            }
+
+            if (m_PlayerBase.GetRoomEntity() == null)
+                MainManagers.Instance.m_LoadingHandler.LoadScene(LoadingHandler.SCENE.MENUS);
+        }
+    }
+
+    internal RoomEntity GetPlayerEntity()
+    {
+        return m_PlayerBase.GetRoomEntity();
+    }
 
     internal void InitializeGame(RoomManager room, LevelManager.MapNode node, RoomEntity player)
     {
+        m_BoardElements.Clear();
+
         m_BoardSizeX = room.GetRoomSize().x;
         m_BoardSizeY = room.GetRoomSize().y;
 
@@ -49,6 +74,50 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
+    internal Vector2Int GetMostAlignedDirection(BoardElement element)
+    {
+        float minDist = float.MaxValue;
+        BoardElement closestElement = null;
+
+        foreach(var entity in m_BoardElements)
+        {
+            if (entity == null)
+                continue;
+
+            if (Mathf.Abs(entity.GetPosition().x - element.GetPosition().x) < minDist)
+                closestElement = entity;
+
+            if (Mathf.Abs(entity.GetPosition().y - element.GetPosition().y) < minDist)
+                closestElement = entity;
+        }
+
+        Vector2 dir = new Vector2Int(closestElement.GetPosition().x - element.GetPosition().x, closestElement.GetPosition().y - element.GetPosition().y);
+        dir = dir.normalized;
+
+        if (Math.Abs(dir.x) > Math.Abs(dir.y))
+        {
+            if (dir.x > 0)
+            {
+                return new Vector2Int(1, 0);
+            }
+            else
+            {
+                return new Vector2Int(-1, 0);
+            }
+        }
+        else
+        {
+            if (dir.y > 0)
+            {
+                return new Vector2Int(0, 1);
+            }
+            else
+            {
+                return new Vector2Int(0, -1);
+            }
+        }
+    }
+
     private void SetupEncounter(RoomManager.ValidEncounter encounter)
     {
         //throw new NotImplementedException();
@@ -56,7 +125,7 @@ public class GameManager : MonoBehaviour
 
     public void SetupRoom(RoomManager roomManager, RoomEntity player, RoomManager.ValidEncounter encounter)
     {
-        m_CurrentRoom = Instantiate(roomManager);
+        m_CurrentRoom = Instantiate(roomManager, transform.parent.parent);
 
         GameObject playerObject = Instantiate(player.m_EntityGameObject, m_CurrentRoom.GetPlayerTransform());
         playerObject.transform.SetParent(m_CurrentRoom.GetPlayerTransform());
@@ -70,6 +139,8 @@ public class GameManager : MonoBehaviour
             Enemy enemy = Instantiate(entity.m_EnemyData.m_EntityGameObject, m_CurrentRoom.GetGridTransform()).GetComponent<Enemy>();
             InitializeBoardElement(enemy, entity.m_StartPosition.x, entity.m_StartPosition.y, entity.m_EnemyData);
         }
+
+        m_RoomStarted = true;
     }
 
     public void InitializeBoardElement(BoardElement element, int x, int y, RoomEntity entity)
@@ -117,4 +188,5 @@ public abstract class BoardElement : MonoBehaviour
     public abstract void SetPosition(int x, int y);
     public abstract Vector2Int GetPosition();
     public abstract ELEMENT_TYPE GetElementType();
+    public abstract void ApplyDamage(float damage);
 }

@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        //throw new System.NotImplementedException();
+        m_PlayerReference.Shoot();
     }
 
     // Start is called before the first frame update

@@ -6,6 +6,15 @@ public class Enemy : BoardElement
 {
     private RoomEntity m_CurrentRoomEntity;
 
+    public override void ApplyDamage(float damage)
+    {
+        m_CurrentRoomEntity.m_Entity.m_EntityStats.m_HP -= damage;
+        if (m_CurrentRoomEntity.m_Entity.m_EntityStats.m_HP <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     public override ELEMENT_TYPE GetElementType()
     {
         return ELEMENT_TYPE.ENEMY;
@@ -18,7 +27,7 @@ public class Enemy : BoardElement
 
     public override void Initialize(RoomEntity entity)
     {
-        m_CurrentRoomEntity = entity;
+        m_CurrentRoomEntity = entity.Duplicate();
     }
 
     public override void SetPosition(int x, int y)

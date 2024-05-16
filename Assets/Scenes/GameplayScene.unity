@@ -483,6 +483,10 @@ MonoBehaviour:
   m_EnemyRooms:
   - Key: 0
     Value: {fileID: 8584483960725546956, guid: b91823a96bd8985429aa75fa8e0db4f1, type: 3}
+  - Key: 0
+    Value: {fileID: 8584483960725546956, guid: b91823a96bd8985429aa75fa8e0db4f1, type: 3}
+  - Key: 0
+    Value: {fileID: 8584483960725546956, guid: b91823a96bd8985429aa75fa8e0db4f1, type: 3}
   m_ShopRooms: []
   m_ItemRooms: []
   m_BossRoom: []

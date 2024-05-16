@@ -9,16 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b93e0150f2cab7f46a1b5f8268704ab5, type: 3}
-  m_Name: SlimeEasy
+  m_Script: {fileID: 11500000, guid: 4c4ba078a077367478cd9833eb8d5090, type: 3}
+  m_Name: SimpleShoot
   m_EditorClassIdentifier: 
-  m_AttackData: []
-  m_MoveRate: 0
-  m_AttackRate: 0
-  m_IdleRate: 0
-  m_EntityStats:
-    m_HP: 10
-    m_Damage: 0
-    m_Speed: 0
-    m_ShotSpeed: 0
-    m_AttackSpeed: 0
+  m_BaseDamage: 1
+  m_BaseAttackSpeed: 1
+  m_BaseShotSpeed: 1
+  m_AttackType: {fileID: 11400000, guid: 633dee94313a3674cb2f073a56ed9ed0, type: 2}
