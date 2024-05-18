@@ -39,15 +39,24 @@ public class GameManager : MonoBehaviour
             int entity = m_BoardElements.FindIndex(x => x != null && x.GetElementType() == BoardElement.ELEMENT_TYPE.ENEMY);
             if (entity == -1)
             {
-                Destroy(m_CurrentRoom.gameObject);
-                m_CurrentRoom = null;
                 m_RoomStarted = false;
-                StartCoroutine(GameplayManagers.Instance.LoadNextRoom());
+                StartCoroutine(GameplayManagers.Instance.ShowNextRoomOptions());
             }
 
-            if (m_PlayerBase.GetRoomEntity() == null)
+            if (m_PlayerBase == null)
                 MainManagers.Instance.m_LoadingHandler.LoadScene(LoadingHandler.SCENE.MENUS);
         }
+    }
+
+    public bool IsAnyObstacle(int iterations, Vector2Int direction, Vector2Int startPos)
+    {
+        for (int i = 0; i < iterations; ++i)
+        {
+            startPos += direction;
+            if (m_OccupationData[startPos.x, startPos.y])
+                return true;
+        }
+        return false;
     }
 
     internal RoomEntity GetPlayerEntity()
@@ -118,6 +127,29 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    internal Vector2Int GetPlayerDirection(BoardElement element)
+    {
+        BoardElement player = m_PlayerBase;
+
+        Vector2 dir = new Vector2Int(player.GetPosition().x - element.GetPosition().x, player.GetPosition().y - element.GetPosition().y);
+        dir = dir.normalized;
+
+        if (Math.Abs(dir.x) > Math.Abs(dir.y))
+        {
+            if (dir.x > 0)
+                return new Vector2Int(1, 0);
+            else
+                return new Vector2Int(-1, 0);
+        }
+        else
+        {
+            if (dir.y > 0)
+                return new Vector2Int(0, 1);
+            else
+                return new Vector2Int(0, -1);
+        }
+    }
+
     private void SetupEncounter(RoomManager.ValidEncounter encounter)
     {
         //throw new NotImplementedException();
@@ -125,7 +157,13 @@ public class GameManager : MonoBehaviour
 
     public void SetupRoom(RoomManager roomManager, RoomEntity player, RoomManager.ValidEncounter encounter)
     {
-        m_CurrentRoom = Instantiate(roomManager, transform.parent.parent, GameplayManagers.Instance.m_GameManager.m_BoardTransform);
+        if (m_CurrentRoom != null)
+        {
+            Destroy(m_CurrentRoom.gameObject);
+            m_CurrentRoom = null;
+        }
+
+        m_CurrentRoom = Instantiate(roomManager, m_BoardTransform);
 
         GameObject playerObject = Instantiate(player.m_EntityGameObject, m_CurrentRoom.GetPlayerTransform());
         playerObject.transform.SetParent(m_CurrentRoom.GetPlayerTransform());
@@ -188,5 +226,5 @@ public abstract class BoardElement : MonoBehaviour
     public abstract void SetPosition(int x, int y);
     public abstract Vector2Int GetPosition();
     public abstract ELEMENT_TYPE GetElementType();
-    public abstract void ApplyDamage(float damage);
+    public abstract void ApplyDamage(int damage);
 }

@@ -8,15 +8,23 @@ public class Player : BoardElement
     private float m_DashSpeed = 1;
     [SerializeField]
     private Transform m_Transform;
+    [SerializeField]
+    private HPHandler m_HPHandler;
 
     private bool m_Dashing = false;
     private Coroutine m_DashCoroutine;
     private RoomEntity m_CurrentPlayerEntity;
+    private EntityStats m_CurrentEntityStats;
     private GameManager m_GameManager;
 
     private void Awake()
     {
         m_GameManager = GameplayManagers.Instance.m_GameManager;
+    }
+
+    public EntityStats GetPlayerStats()
+    {
+        return m_CurrentEntityStats;
     }
 
     public RoomEntity GetRoomEntity()
@@ -28,6 +36,15 @@ public class Player : BoardElement
     public override void Initialize(RoomEntity entity)
     {
         m_CurrentPlayerEntity = entity;
+
+        m_CurrentEntityStats = new EntityStats();
+        m_CurrentEntityStats.m_AttackSpeed = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_AttackSpeed;
+        m_CurrentEntityStats.m_Damage = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Damage;
+        m_CurrentEntityStats.m_HP = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP;
+        m_CurrentEntityStats.m_ShotSpeed = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_ShotSpeed;
+        m_CurrentEntityStats.m_Speed = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Speed;
+
+        m_HPHandler.Initialize(m_CurrentEntityStats.m_HP);
     }
 
     public override Vector2Int GetPosition()
@@ -67,7 +84,7 @@ public class Player : BoardElement
         Vector2Int dir = m_GameManager.GetMostAlignedDirection(this);
         GameObject attack = Instantiate(m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_AttackType.m_Projectile, GameplayManagers.Instance.m_GameManager.m_ProjectilesTransform);
         attack.transform.localPosition = m_Transform.position;
-        attack.GetComponent<Attack>().Initialize(m_CurrentPlayerEntity.m_Entity.m_AttackData[0], dir, m_CurrentPlayerEntity.m_Entity.m_EntityStats, "Player");
+        attack.GetComponent<Attack>().Initialize(m_CurrentPlayerEntity.m_Entity.m_AttackData[0], dir, m_CurrentEntityStats, "Player");
     }
 
     public void Dash(Vector2Int _direction)
@@ -107,10 +124,11 @@ public class Player : BoardElement
         m_Dashing = false;
     }
 
-    public override void ApplyDamage(float damage)
+    public override void ApplyDamage(int damage)
     {
-        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP -= damage;
-        if (m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP <= 0)
+        m_CurrentEntityStats.m_HP -= damage;
+        m_HPHandler.ModifyCurrentHP(m_CurrentEntityStats.m_HP);
+        if (m_CurrentEntityStats.m_HP <= 0)
         {
             Destroy(gameObject);
         }

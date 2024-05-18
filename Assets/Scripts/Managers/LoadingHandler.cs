@@ -27,6 +27,7 @@ public class LoadingHandler : MonoBehaviour
     {
         if (m_LoadingScene)
             return;
+        m_LoadingScene = true;
 
         switch (scene)
         {
@@ -100,6 +101,8 @@ public class LoadingHandler : MonoBehaviour
         m_CurrentSceneLoaded = loadScene;
 
         m_FadeImage.raycastTarget = false;
+
+        m_LoadingScene = false;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)

@@ -48,6 +48,10 @@ public class Attack : MonoBehaviour
                 if (m_Attack.m_AttackType.m_DamageEffect == AttackType.DAMAGE_EFFECT.SINGLE)
                     Destroy(gameObject);
             }
+            else if (collision.tag == "Obstacle")
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
