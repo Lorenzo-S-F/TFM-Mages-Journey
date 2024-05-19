@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Player : BoardElement
 {
-    [SerializeField]
-    private float m_DashSpeed = 1;
     [SerializeField]
     private Transform m_Transform;
     [SerializeField]
@@ -90,7 +89,18 @@ public class Player : BoardElement
         Vector2Int dir = m_GameManager.GetMostAlignedDirection(this);
         GameObject attack = Instantiate(m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_AttackType.m_Projectile, GameplayManagers.Instance.m_GameManager.m_ProjectilesTransform);
         attack.transform.localPosition = m_Transform.position;
-        attack.GetComponent<Attack>().Initialize(m_CurrentPlayerEntity.m_Entity.m_AttackData[0], dir, m_CurrentEntityStats, "Player");
+
+        var bullets = attack.GetComponentsInChildren<Attack>().ToList();
+        var extraAttack = attack.GetComponent<Attack>();
+
+        if (extraAttack != null)
+            bullets.Add(extraAttack);
+
+        for (int i = 0; i < bullets.Count; ++i)
+            bullets[i].Initialize(m_CurrentPlayerEntity.m_Entity.m_AttackData[0], dir, m_CurrentEntityStats, "Player");
+
+        if (dir.x != 0)
+            attack.gameObject.transform.Rotate(new Vector3(0, 0, 90));
     }
 
     public void Dash(Vector2Int _direction)
@@ -118,7 +128,7 @@ public class Player : BoardElement
         {
             yield return null;
 
-            t += Time.deltaTime * m_DashSpeed;
+            t += Time.deltaTime * m_CurrentEntityStats.m_Speed;
 
             smoothValue = Mathf.SmoothStep(0, 1, t);
             m_Transform.localPosition = startPosition + new Vector3(_direction.x * smoothValue, _direction.y * smoothValue, 0);

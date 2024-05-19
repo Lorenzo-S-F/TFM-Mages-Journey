@@ -35,6 +35,7 @@ public class LevelManager : MonoBehaviour
         MapNode end = new MapNode();
 
         end.m_RoomType = MapNode.ROOM_TYPE.BOSS;
+        end.m_Rarity = MapNode.RARITY.HARD;
         start.m_RoomType = MapNode.ROOM_TYPE.START;
 
         m_Map[m_MapSizeX / 2, 0] = start;
@@ -169,6 +170,12 @@ public class LevelManager : MonoBehaviour
     public List<MapNode> GetNextLayerMapNodes()
     {
         List<MapNode> nextMapNodes = new List<MapNode>();
+
+        if (m_Map.GetLength(1) == m_CurrentGameLayer + 1)
+        {
+            MainManagers.Instance.m_LoadingHandler.LoadScene(LoadingHandler.SCENE.MENUS);
+            return nextMapNodes;
+        }
 
         while (nextMapNodes.Count == 0)
         {

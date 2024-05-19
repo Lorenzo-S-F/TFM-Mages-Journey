@@ -41,6 +41,11 @@ public class GameManager : MonoBehaviour
             {
                 m_RoomStarted = false;
                 StartCoroutine(GameplayManagers.Instance.ShowNextRoomOptions());
+
+                foreach (Transform projectile in m_ProjectilesTransform)
+                {
+                    Destroy(projectile.gameObject);
+                }
             }
 
             if (m_PlayerBase == null)
@@ -98,17 +103,35 @@ public class GameManager : MonoBehaviour
     {
         float minDist = float.MaxValue;
         BoardElement closestElement = null;
+        bool selectedIsAligned = false;
 
         foreach(var entity in m_BoardElements)
         {
             if (entity == null)
                 continue;
 
-            if (Mathf.Abs(entity.GetPosition().x - element.GetPosition().x) < minDist)
-                closestElement = entity;
+            if (selectedIsAligned && entity.GetPosition().x != element.GetPosition().x && entity.GetPosition().y != element.GetPosition().y)
+                continue;
 
-            if (Mathf.Abs(entity.GetPosition().y - element.GetPosition().y) < minDist)
+            bool entityAligned = entity.GetPosition().x != element.GetPosition().x || entity.GetPosition().y != element.GetPosition().y;
+
+            float dist = Mathf.Abs(entity.GetPosition().x - element.GetPosition().x);
+
+            if (dist < minDist || (!selectedIsAligned && entityAligned))
+            {
+                selectedIsAligned = entityAligned;
                 closestElement = entity;
+                minDist = dist;
+            }
+
+            dist = Mathf.Abs(entity.GetPosition().y - element.GetPosition().y);
+
+            if (dist < minDist || (!selectedIsAligned && entityAligned))
+            {
+                selectedIsAligned = entityAligned;
+                closestElement = entity;
+                minDist = dist;
+            }
         }
 
         Vector2 dir = new Vector2Int(closestElement.GetPosition().x - element.GetPosition().x, closestElement.GetPosition().y - element.GetPosition().y);

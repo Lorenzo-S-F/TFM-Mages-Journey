@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   m_AttackData:
-  - {fileID: 11400000, guid: fc90a1149dc91b149817e7f4910187b7, type: 2}
+  - {fileID: 11400000, guid: 52bd0a43fbc0cd4469f647fbeed2d10a, type: 2}
   m_MoveRate: 0
+  m_IdleTimeAfterMove: 0
   m_AttackRate: 0
   m_IdleRate: 0
+  m_IdleTime: 0
   m_EntityStats:
     m_HP: 10
     m_Damage: 1
-    m_Speed: 1
+    m_Speed: 5
     m_ShotSpeed: 1
     m_AttackSpeed: 1

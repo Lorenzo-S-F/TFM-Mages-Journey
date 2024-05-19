@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerDownHandler
 {
     private Player m_PlayerReference;
     private Vector2 m_StartDragPos;
+    private float m_ClickDownTime;
     //private bool m_Dragging = false;
 
     public void SetPlayer(Player player)
@@ -77,18 +78,14 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if ((Time.time - m_ClickDownTime) > 0.12f)
+            return;
+
         m_PlayerReference.Shoot();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void OnPointerDown(PointerEventData eventData)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        m_ClickDownTime = Time.time;
     }
 }
