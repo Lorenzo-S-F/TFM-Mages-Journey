@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   m_AttackData:
-  - {fileID: 11400000, guid: 52bd0a43fbc0cd4469f647fbeed2d10a, type: 2}
+  - {fileID: 11400000, guid: fc90a1149dc91b149817e7f4910187b7, type: 2}
   m_MoveRate: 0
   m_IdleTimeAfterMove: 0
   m_AttackRate: 0

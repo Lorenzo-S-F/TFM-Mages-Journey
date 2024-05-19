@@ -300,10 +300,10 @@ public class LevelManager : MonoBehaviour
     private void OnGUI()
     {
 
-        if (GUI.Button(new Rect(0, 800, 200, 100), "Generate Level"))
+        /*if (GUI.Button(new Rect(0, 800, 200, 100), "Generate Level"))
         {
             GenerateLevel();
-        }
+        }*/
     }
 #endif
     #endregion

@@ -94,9 +94,9 @@ MonoBehaviour:
         m_Type: 2
       m_StartPosition: {x: 3, y: 3}
     - m_EnemyData:
-        m_EntityGameObject: {fileID: 7742341187413574814, guid: 2f65769ed1a5376478d21b41cadf2230, type: 3}
+        m_EntityGameObject: {fileID: 7742341187413574814, guid: 6d679c22343857c439300683ad80ad6e, type: 3}
         m_Position: {x: 5, y: 5}
-        m_Entity: {fileID: 11400000, guid: 6a9b47085104cd540905e48396c45b4f, type: 2}
+        m_Entity: {fileID: 11400000, guid: a9d6031a5958e194c9152b77857250ce, type: 2}
         m_Type: 2
       m_StartPosition: {x: 5, y: 5}
   m_AvaliableSlots: []
