@@ -16,6 +16,7 @@ public class Player : BoardElement
     private RoomEntity m_CurrentPlayerEntity;
     private EntityStats m_CurrentEntityStats;
     private GameManager m_GameManager;
+    private bool m_Initialized = false;
 
     private void Awake()
     {
@@ -35,6 +36,11 @@ public class Player : BoardElement
     #region INHERITED_METHODS
     public override void Initialize(RoomEntity entity)
     {
+        if (m_Initialized)
+            return;
+
+        m_Initialized = true;
+
         m_CurrentPlayerEntity = entity;
 
         m_CurrentEntityStats = new EntityStats();
@@ -135,28 +141,26 @@ public class Player : BoardElement
     }
     #endregion
 
-    #region DEBUG
-    private void OnGUI()
+    #region EXTERNAL_ACTIONS
+
+    public void ApplyItem(ItemSlotHandler.Item item)
     {
-        if (GUI.Button(new Rect(0,0,200,100), "Dash left"))
-        {
-            Dash(new Vector2Int(-1, 0));
-        }
+        m_CurrentEntityStats.m_AttackSpeed += item.m_PlaneStatModifiers.m_AttackSpeed;
+        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_AttackSpeed += item.m_PlaneStatModifiers.m_AttackSpeed;
 
-        if (GUI.Button(new Rect(0, 200, 200, 100), "Dash right"))
-        {
-            Dash(new Vector2Int(1, 0));
-        }
+        m_CurrentEntityStats.m_Damage += item.m_PlaneStatModifiers.m_Damage;
+        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Damage += item.m_PlaneStatModifiers.m_Damage;
 
-        if (GUI.Button(new Rect(0, 400, 200, 100), "Dash top"))
-        {
-            Dash(new Vector2Int(0, 1));
-        }
+        m_CurrentEntityStats.m_HP += item.m_PlaneStatModifiers.m_HP;
+        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP += item.m_PlaneStatModifiers.m_HP;
+        m_HPHandler.ModifyAmount(m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP, m_CurrentEntityStats.m_HP);
 
-        if (GUI.Button(new Rect(0, 600, 200, 100), "Dash bottom"))
-        {
-            Dash(new Vector2Int(0, -1));
-        }
+        m_CurrentEntityStats.m_ShotSpeed += item.m_PlaneStatModifiers.m_ShotSpeed;
+        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_ShotSpeed += item.m_PlaneStatModifiers.m_ShotSpeed;
+
+        m_CurrentEntityStats.m_Speed += item.m_PlaneStatModifiers.m_Speed;
+        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Speed += item.m_PlaneStatModifiers.m_Speed;
     }
+
     #endregion
 }

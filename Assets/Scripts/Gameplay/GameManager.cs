@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (m_RoomStarted)
+        if (m_RoomStarted && (m_CurrentRoom.GetRoomType() == LevelManager.MapNode.ROOM_TYPE.ENEMY || m_CurrentRoom.GetRoomType() == LevelManager.MapNode.ROOM_TYPE.BOSS))
         {
             int entity = m_BoardElements.FindIndex(x => x != null && x.GetElementType() == BoardElement.ELEMENT_TYPE.ENEMY);
             if (entity == -1)
@@ -48,6 +48,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ApplyItemToPlayer(ItemSlotHandler.Item item)
+    {
+        m_PlayerBase.ApplyItem(item);
+    }
     public bool IsAnyObstacle(int iterations, Vector2Int direction, Vector2Int startPos)
     {
         for (int i = 0; i < iterations; ++i)
@@ -80,7 +84,6 @@ public class GameManager : MonoBehaviour
 
         RoomManager.ValidEncounter encounter = room.GetEncounter(node.m_Rarity);
         SetupRoom(room, player, encounter);
-        SetupEncounter(encounter);
     }
 
     public bool IsValidPosition(int x, int y)
@@ -150,11 +153,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SetupEncounter(RoomManager.ValidEncounter encounter)
-    {
-        //throw new NotImplementedException();
-    }
-
     public void SetupRoom(RoomManager roomManager, RoomEntity player, RoomManager.ValidEncounter encounter)
     {
         if (m_CurrentRoom != null)
@@ -164,18 +162,27 @@ public class GameManager : MonoBehaviour
         }
 
         m_CurrentRoom = Instantiate(roomManager, m_BoardTransform);
+        m_CurrentRoom.Initialize();
 
         GameObject playerObject = Instantiate(player.m_EntityGameObject, m_CurrentRoom.GetPlayerTransform());
         playerObject.transform.SetParent(m_CurrentRoom.GetPlayerTransform());
-
         m_PlayerBase.InitializeTransform(playerObject.transform);
         m_PlayerController.SetPlayer(m_PlayerBase);
         InitializeBoardElement(m_PlayerBase, encounter.m_PlayerInitialState.x, encounter.m_PlayerInitialState.y, player);
 
-        foreach(var entity in encounter.m_RoomEnemies)
+        foreach (var entity in encounter.m_RoomEnemies)
         {
-            Enemy enemy = Instantiate(entity.m_EnemyData.m_EntityGameObject, m_CurrentRoom.GetGridTransform()).GetComponent<Enemy>();
-            InitializeBoardElement(enemy, entity.m_StartPosition.x, entity.m_StartPosition.y, entity.m_EnemyData);
+            switch (entity.m_EnemyData.m_Type)
+            {
+                case RoomEntity.ENTITY_TYPE.OBSTACLE:
+                    m_OccupationData[entity.m_StartPosition.x, entity.m_StartPosition.y] = true;
+                    break;
+                case RoomEntity.ENTITY_TYPE.ENEMY:
+                case RoomEntity.ENTITY_TYPE.NPC:
+                    Enemy enemy = Instantiate(entity.m_EnemyData.m_EntityGameObject, m_CurrentRoom.GetGridTransform()).GetComponent<Enemy>();
+                    InitializeBoardElement(enemy, entity.m_StartPosition.x, entity.m_StartPosition.y, entity.m_EnemyData);
+                    break;
+            }
         }
 
         m_RoomStarted = true;

@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class GameplayManagers : Singleton<GameplayManagers>
 {
@@ -9,6 +11,8 @@ public class GameplayManagers : Singleton<GameplayManagers>
     public GameManager m_GameManager;
     public LevelManager m_LevelManager;
     public RoomSelectionManager m_SelectionManager;
+
+    public CommonButtonHandler m_AcceptButton;
 
     public IEnumerator Initialize()
     {
@@ -38,5 +42,19 @@ public class GameplayManagers : Singleton<GameplayManagers>
     public IEnumerator ShowNextRoomOptions()
     {
         yield return m_SelectionManager.SetupSelection(m_LevelManager.GetNextLayerMapNodes());
+    }
+
+    public void ShowAcceptButton(UnityAction onClick)
+    {
+        m_AcceptButton.gameObject.SetActive(true);
+        m_AcceptButton.m_OnClick.RemoveAllListeners();
+        m_AcceptButton.m_OnClick.AddListener(onClick);
+        m_AcceptButton.m_OnClick.AddListener(() => m_AcceptButton.gameObject.SetActive(false));
+    }
+
+    public void HideAcceptButton()
+    {
+        m_AcceptButton.gameObject.SetActive(false);
+        m_AcceptButton.m_OnClick.RemoveAllListeners();
     }
 }

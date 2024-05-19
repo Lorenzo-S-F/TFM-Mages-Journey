@@ -6,10 +6,12 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+
     public List<Pair<int, RoomEntity>> m_AvaliablePlayers;
     public List<Pair<int, RoomManager>> m_EnemyRooms;
     public List<Pair<int, RoomManager>> m_ShopRooms;
     public List<Pair<int, RoomManager>> m_ItemRooms;
+    public List<Pair<int, ItemSlotHandler.Item>> m_AvaliableItems;
     public List<Pair<int, RoomManager>> m_BossRoom;
     public GenerationSpecs m_GenerationSpecs;
 
@@ -49,7 +51,7 @@ public class LevelManager : MonoBehaviour
             {
                 MapNode newNode = new MapNode();
                 newNode.m_Rarity = m_GenerationSpecs.GetRandomRarity();
-                newNode.m_RoomType = MapNode.ROOM_TYPE.ENEMY;
+                newNode.m_RoomType = MapNode.ROOM_TYPE.ITEM;
                 m_Map[x, y] = newNode;
                 generated++;
             }
@@ -57,17 +59,19 @@ public class LevelManager : MonoBehaviour
 
         // Two shop rooms
         generated = 0;
+        List<int> usedY = new List<int>();
         while (generated < 2)
         {
             int x = RandomNumberGenerator.GetInt32(0, m_MapSizeX);
             int y = RandomNumberGenerator.GetInt32(1, m_MapSizeY - 1);
 
-            if (m_Map[x, y] == null)
+            if (m_Map[x, y] == null && (usedY.FindIndex(element => element == y) == -1))
             {
                 MapNode newNode = new MapNode();
                 newNode.m_Rarity = m_GenerationSpecs.GetRandomRarity();
                 newNode.m_RoomType = MapNode.ROOM_TYPE.ENEMY;
                 m_Map[x, y] = newNode;
+                usedY.Add(y);
                 generated++;
             }
         }
@@ -112,6 +116,16 @@ public class LevelManager : MonoBehaviour
         }
         Debug.Log(debugReume);
 #endif
+    }
+
+    public List<Pair<int, ItemSlotHandler.Item>> GetItemPool()
+    {
+        return m_AvaliableItems.FindAll(x => x.Key == m_CurrentGameWorld);
+    }
+
+    public void RemoveItemFormPool(ItemSlotHandler.Item item)
+    {
+        m_AvaliableItems.RemoveAll(x => x.Value == item);
     }
 
     public (RoomManager, MapNode) GetRoom(int room)
@@ -239,6 +253,14 @@ public class LevelManager : MonoBehaviour
     {
         public T1 Key;
         public T2 Value;
+
+        public Pair() { }
+
+        public Pair(T1 key, T2 value)
+        {
+            Key = key;
+            Value = value;
+        }
     }
 
     public class MapNode
@@ -263,7 +285,7 @@ public class LevelManager : MonoBehaviour
             ITEM,
             BOSS,
             START
-        }
+        }        
     }
 
     #region DEBUG

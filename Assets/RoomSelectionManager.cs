@@ -29,10 +29,16 @@ public class RoomSelectionManager : MonoBehaviour
         m_Canvas.alpha = 1;
 
 
+        List<Pair<MapNode.ROOM_TYPE, MapNode.RARITY>> currentViewd = new List<Pair<MapNode.ROOM_TYPE, MapNode.RARITY>>();
+
         for(int i = 0; i < rooms.Count; ++i)
         {
+            if (currentViewd.FindIndex(x => (x.Key == rooms[i].m_RoomType && x.Value == rooms[i].m_Rarity)) != -1)
+                continue;
+            
             RoomSelectionHandler handler = Instantiate(m_SelectorReference, m_SelectorParent);
             yield return handler.Initialize(i, m_SpriteMapper.Find((x) => x.Key == rooms[i].m_RoomType).Value, RoomToText(rooms[i]));
+            currentViewd.Add(new Pair<MapNode.ROOM_TYPE, MapNode.RARITY>(rooms[i].m_RoomType, rooms[i].m_Rarity));
         }
 
         yield return null;

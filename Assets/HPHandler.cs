@@ -51,6 +51,25 @@ public class HPHandler : MonoBehaviour
 
     public void ModifyAmount(int currentAmount, int currentHp)
     {
+        int difference = currentAmount - m_CurrentHPImages.Count;
+        if (difference > 0)
+        {
+            for (int i = 0; i < difference; ++i)
+            {
+                Image slot = Instantiate(m_EmptyImage, transform);
+                slot.sprite = m_FilledHPSlot;
+                m_CurrentHPImages.Add(slot);
+            }
+        }
+        else if (difference < 0)
+        {
+            for (int i = 0; i < difference; ++i)
+            {
+                Destroy(m_CurrentHPImages[0].gameObject);
+                m_CurrentHPImages.RemoveAt(0);
+            }
+        }
 
+        ModifyCurrentHP(currentHp);
     }
 }

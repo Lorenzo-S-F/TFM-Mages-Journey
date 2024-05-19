@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 1921015589333468874}
   - component: {fileID: 8584483960725546956}
   m_Layer: 0
-  m_Name: Room0
+  m_Name: EnemyRoom0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,8 +87,10 @@ MonoBehaviour:
         m_Entity: {fileID: 11400000, guid: a9d6031a5958e194c9152b77857250ce, type: 2}
         m_Type: 2
       m_StartPosition: {x: 3, y: 3}
+  m_AvaliableSlots: []
   m_PlayerTransform: {fileID: 2817159696063295656}
   m_GridTransform: {fileID: 2817159696063295656}
+  m_RoomType: 2
 --- !u!1 &6912272259619003422
 GameObject:
   m_ObjectHideFlags: 0

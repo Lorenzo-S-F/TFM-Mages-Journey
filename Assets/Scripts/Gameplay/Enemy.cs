@@ -9,6 +9,7 @@ public class Enemy : BoardElement
     private GameManager m_GameManager;
     private RoomEntity m_PlayerEntity;
     private bool m_Moving = false;
+    private bool m_Initialized = false;
 
     private void Awake()
     {
@@ -57,6 +58,10 @@ public class Enemy : BoardElement
 
     public override void Initialize(RoomEntity entity)
     {
+        if (m_Initialized)
+            return;
+
+        m_Initialized = true;
         m_CurrentRoomEntity = entity.Duplicate();
     }
 

@@ -19,7 +19,7 @@ public class CommonButtonHandler : Selectable, IPointerClickHandler, IEventSyste
     [SerializeField]
     private Image m_ButtonImage;
     [SerializeField]
-    private UnityEvent m_OnClick;
+    public UnityEvent m_OnClick;
     [SerializeField]
     private AnimationCurve m_ObjectsCurve;
 
