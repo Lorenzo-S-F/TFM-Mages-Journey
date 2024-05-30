@@ -116,7 +116,7 @@ public class Enemy : BoardElement
 
         int selectedShot = RandomNumberGenerator.GetInt32(0, m_CurrentRoomEntity.m_Entity.m_AttackData.Count);
 
-        GameObject attack = Instantiate(m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot].m_AttackType.m_Projectile, GameplayManagers.Instance.m_GameManager.m_ProjectilesTransform);
+        GameObject attack = Instantiate(m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot].m_Projectile, GameplayManagers.Instance.m_GameManager.m_ProjectilesTransform);
         attack.transform.localPosition = transform.position;
 
         var bullets = attack.GetComponentsInChildren<Attack>().ToList();

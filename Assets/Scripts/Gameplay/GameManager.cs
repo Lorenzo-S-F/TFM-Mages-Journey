@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
 
     public bool IsValidPosition(int x, int y)
     {
-        if (x < 0 || x >= m_BoardSizeX || y < 0 || y >= m_BoardSizeY || m_OccupationData[x, y] || m_BoardElements.FindIndex(element => (element.GetPosition().x == x && element.GetPosition().y == y)) != -1)
+        if (x < 0 || x >= m_BoardSizeX || y < 0 || y >= m_BoardSizeY || m_OccupationData[x, y] || m_BoardElements.FindIndex(element => element != null && element.GetPosition().x == x && element.GetPosition().y == y) != -1)
             return false;
 
         return true;
@@ -115,16 +115,7 @@ public class GameManager : MonoBehaviour
 
             bool entityAligned = entity.GetPosition().x != element.GetPosition().x || entity.GetPosition().y != element.GetPosition().y;
 
-            float dist = Mathf.Abs(entity.GetPosition().x - element.GetPosition().x);
-
-            if (dist < minDist || (!selectedIsAligned && entityAligned))
-            {
-                selectedIsAligned = entityAligned;
-                closestElement = entity;
-                minDist = dist;
-            }
-
-            dist = Mathf.Abs(entity.GetPosition().y - element.GetPosition().y);
+            float dist = Vector2.Distance(entity.GetPosition(), element.GetPosition());
 
             if (dist < minDist || (!selectedIsAligned && entityAligned))
             {

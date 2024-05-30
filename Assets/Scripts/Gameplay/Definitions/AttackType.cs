@@ -1,14 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "AttackPattern", menuName = "GameAssets/AttackPatternDef", order = 3)]
-public class AttackType : ScriptableObject
+[Serializable]
+public class AttackType
 {
     public ATTACK_TYPE m_AttackType;
     public THROW_TYPE m_ThrowType;
     public DAMAGE_EFFECT m_DamageEffect;
-    public GameObject m_Projectile = null;
     public float m_DamageTime = 0;
     public float m_IntervalEffectTime = 0;
 

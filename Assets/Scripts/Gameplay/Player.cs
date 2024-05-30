@@ -87,7 +87,7 @@ public class Player : BoardElement
             return;
 
         Vector2Int dir = m_GameManager.GetMostAlignedDirection(this);
-        GameObject attack = Instantiate(m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_AttackType.m_Projectile, GameplayManagers.Instance.m_GameManager.m_ProjectilesTransform);
+        GameObject attack = Instantiate(m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_Projectile, GameplayManagers.Instance.m_GameManager.m_ProjectilesTransform);
         attack.transform.localPosition = m_Transform.position;
 
         var bullets = attack.GetComponentsInChildren<Attack>().ToList();

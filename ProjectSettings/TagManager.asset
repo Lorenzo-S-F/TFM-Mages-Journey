@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Projectile
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -45,6 +46,12 @@ TagManager:
   - name: Elements
     uniqueID: 3912391573
     locked: 0
+  - name: ParticlesBehind
+    uniqueID: 750953769
+    locked: 0
   - name: Entities
     uniqueID: 2887689807
+    locked: 0
+  - name: ParticlesTop
+    uniqueID: 712051387
     locked: 0
