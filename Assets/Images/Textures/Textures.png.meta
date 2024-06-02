@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3185b3e61342b2542b7689f68ec318b9
+guid: cd1613504f5998a4e8bd55841b529eb5
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,9 +48,9 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 128
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -123,64 +123,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ButtonGenericBrown_0
+      name: Textures_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 32
-        height: 16
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 3, y: 5, z: 3, w: 1}
+      border: {x: 1, y: 1, z: 1, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c8a4e968082c4db45a72583d7506aab4
-      internalID: 1242099298
+      spriteID: abade008d95f55848b594cc700024fb7
+      internalID: -1171406369
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ButtonGenericBrown_1
+      name: Textures_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 16
+        x: 128
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 3, y: 4, z: 3, w: 2}
+      border: {x: 16, y: 16, z: 16, w: 16}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7b5d5123ccbac3443989cf4388391b25
-      internalID: 571906848
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ButtonGenericBrown_2
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 3, y: 3, z: 3, w: 3}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0bd1936221508cb46b60913d90db6aae
-      internalID: 261207381
+      spriteID: 97959813856ec99489b5ee77e018b7aa
+      internalID: -1636534973
       vertices: []
       indices: 
       edges: []
@@ -196,9 +175,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ButtonGenericBrown_0: 1242099298
-      ButtonGenericBrown_1: 571906848
-      ButtonGenericBrown_2: 261207381
+      Textures_0: -1171406369
+      Textures_1: -1636534973
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

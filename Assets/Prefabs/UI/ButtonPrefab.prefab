@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -294878566, guid: 84bb7550803495144974fd5ed94309ae, type: 3}
+  m_Sprite: {fileID: 1590224762, guid: a91d90c57c3f5204cae67ea416a2348c, type: 3}
   m_Type: 1
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.05
+  m_PixelsPerUnitMultiplier: 0.2
 --- !u!114 &3846789045866427589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,11 +120,14 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4779633563150544708}
   m_AnimationTime: 0.1
   m_OnClickSprites:
-  - {fileID: -294878566, guid: 84bb7550803495144974fd5ed94309ae, type: 3}
-  - {fileID: -1536995337, guid: 84bb7550803495144974fd5ed94309ae, type: 3}
-  - {fileID: -906578991, guid: 84bb7550803495144974fd5ed94309ae, type: 3}
+  - {fileID: 1590224762, guid: a91d90c57c3f5204cae67ea416a2348c, type: 3}
+  - {fileID: -543491198, guid: a91d90c57c3f5204cae67ea416a2348c, type: 3}
+  - {fileID: 101623711, guid: a91d90c57c3f5204cae67ea416a2348c, type: 3}
   m_ChildObjects: {fileID: 4696242903975338422}
   m_ButtonImage: {fileID: 4779633563150544708}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
   m_ObjectsCurve:
     serializedVersion: 2
     m_Curve:

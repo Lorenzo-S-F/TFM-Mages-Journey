@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1138891951266490816, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_Name
-      value: ButtonPrefab
+      value: ButtonBrown
       objectReference: {fileID: 0}
     - target: {fileID: 3627697678845464013, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_Pivot.x
@@ -91,6 +91,42 @@ PrefabInstance:
     - target: {fileID: 3627697678845464013, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3846789045866427589, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
+      propertyPath: m_OnClickSprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 1242099298, guid: 3185b3e61342b2542b7689f68ec318b9, type: 3}
+    - target: {fileID: 3846789045866427589, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
+      propertyPath: m_OnClickSprites.Array.data[1]
+      value: 
+      objectReference: {fileID: 571906848, guid: 3185b3e61342b2542b7689f68ec318b9, type: 3}
+    - target: {fileID: 3846789045866427589, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
+      propertyPath: m_OnClickSprites.Array.data[2]
+      value: 
+      objectReference: {fileID: 261207381, guid: 3185b3e61342b2542b7689f68ec318b9, type: 3}
+    - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1242099298, guid: 3185b3e61342b2542b7689f68ec318b9, type: 3}
+    - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

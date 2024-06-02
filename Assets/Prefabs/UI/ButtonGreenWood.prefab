@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6671947558379222918
+--- !u!1001 &8847834794855292478
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1138891951266490816, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_Name
-      value: ButtonBlue
+      value: ButtonGreenWood
       objectReference: {fileID: 0}
     - target: {fileID: 3627697678845464013, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_Pivot.x
@@ -95,15 +95,15 @@ PrefabInstance:
     - target: {fileID: 3846789045866427589, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_OnClickSprites.Array.data[0]
       value: 
-      objectReference: {fileID: -1278429171, guid: 558a939fc7e3a744694b62ded51876c3, type: 3}
+      objectReference: {fileID: 35763802, guid: 16ce616ddb85030499bc2e156ab95112, type: 3}
     - target: {fileID: 3846789045866427589, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_OnClickSprites.Array.data[1]
       value: 
-      objectReference: {fileID: -439156720, guid: 558a939fc7e3a744694b62ded51876c3, type: 3}
+      objectReference: {fileID: 193648369, guid: 16ce616ddb85030499bc2e156ab95112, type: 3}
     - target: {fileID: 3846789045866427589, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_OnClickSprites.Array.data[2]
       value: 
-      objectReference: {fileID: 848056002, guid: 558a939fc7e3a744694b62ded51876c3, type: 3}
+      objectReference: {fileID: -1523564075, guid: 16ce616ddb85030499bc2e156ab95112, type: 3}
     - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_Type
       value: 1
@@ -111,22 +111,14 @@ PrefabInstance:
     - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1278429171, guid: 558a939fc7e3a744694b62ded51876c3, type: 3}
-    - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1590224762, guid: a91d90c57c3f5204cae67ea416a2348c, type: 3}
     - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_FillCenter
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4779633563150544708, guid: c9f3e07d70e81b641b52d22d26a69124, type: 3}
       propertyPath: m_PixelsPerUnitMultiplier
