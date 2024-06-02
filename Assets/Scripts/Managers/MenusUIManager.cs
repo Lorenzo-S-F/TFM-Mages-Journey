@@ -8,4 +8,9 @@ public class MenusUIManager : MonoBehaviour
     {
         MainManagers.Instance.m_LoadingHandler.LoadScene(LoadingHandler.SCENE.GAMEPLAY);
     }
+
+    public void OpenSettings()
+    {
+        PopupsManager.Instance.TryOpenPopup(PopupsManager.POPUPS.SETTINGS);
+    }
 }

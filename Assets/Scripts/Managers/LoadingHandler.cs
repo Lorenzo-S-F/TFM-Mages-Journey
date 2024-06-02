@@ -72,6 +72,8 @@ public class LoadingHandler : MonoBehaviour
             yield return SceneManager.UnloadSceneAsync(m_CurrentSceneLoaded);
         }
 
+        PopupsManager.Instance.ClosePopup();
+
         yield return SceneManager.LoadSceneAsync(loadScene, LoadSceneMode.Additive);
         
         // Camera change Generic -> Scene
