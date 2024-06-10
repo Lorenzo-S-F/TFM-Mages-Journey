@@ -104,4 +104,9 @@ public class GameplayManagers : Singleton<GameplayManagers>
         m_ExitButton.gameObject.SetActive(false);
         m_ExitButton.m_OnClick.RemoveAllListeners();
     }
+
+    public void OpenSettingsPopup()
+    {
+        PopupsManager.Instance.TryOpenPopup(PopupsManager.POPUPS.SETTINGS);
+    }
 }

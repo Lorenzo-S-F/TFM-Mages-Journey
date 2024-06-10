@@ -9,6 +9,8 @@ public class PopupController : MonoBehaviour
     public float m_AnimationSpeed = 1;
     public float m_ResizeScale = 1;
 
+    public GameObject m_GameplayExtraButton;
+
     private void Awake()
     {
         m_PopupCanvas.alpha = 0;
@@ -18,13 +20,22 @@ public class PopupController : MonoBehaviour
 
     public void OnEntry()
     {
+        GameplayManagers manager = GameplayManagers.Instance;
+        if (manager != null)
+        {
+            m_GameplayExtraButton.SetActive(true);
+            manager.m_TimeMultiplier = 0;
+        }
+        else
+            m_GameplayExtraButton.SetActive(false);
+
         StartCoroutine(OnEntryAnimation());
     }
 
     public IEnumerator OnEntryAnimation()
     {
         m_PopupCanvas.alpha = 1;
-        m_PopupCanvas.interactable = false;
+        m_PopupCanvas.interactable = true;
         m_PopupCanvas.blocksRaycasts = true;
 
         float t = 0;
@@ -50,8 +61,21 @@ public class PopupController : MonoBehaviour
         
     }
 
+    public void OnExitButtonClicked()
+    {
+        MainManagers.Instance.m_LoadingHandler.LoadScene(LoadingHandler.SCENE.MENUS);
+        ClosePopup();
+    }
+
     public void ClosePopup()
     {
+        GameplayManagers manager = GameplayManagers.Instance;
+        if (manager != null)
+        {
+            m_GameplayExtraButton.SetActive(false);
+            manager.m_TimeMultiplier = 1;
+        }
+
         m_PopupCanvas.blocksRaycasts = false;
         PopupsManager.Instance.ClosePopup();
     }
