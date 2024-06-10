@@ -6,9 +6,13 @@ using UnityEngine;
 [Serializable]
 public class EntityAttack
 {
-    public int m_BaseDamage;
-    public int m_BaseAttackSpeed;
-    public int m_BaseShotSpeed;
-    public AttackType m_AttackType;
+    public ShotSystem.Pattern m_AttackPattern;
     public GameObject m_Projectile;
+    public THROW_TYPE m_ThrowType;
+    public enum THROW_TYPE
+    {
+        UNDEFINED,
+        GROUND,
+        AIR
+    }
 }

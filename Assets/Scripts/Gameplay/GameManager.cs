@@ -31,6 +31,20 @@ public class GameManager : MonoBehaviour
     public Player m_PlayerBase;
     private RoomManager m_CurrentRoom;
     private bool m_RoomStarted = false;
+    private Coroutine m_CurrentSlowTime = null;
+    private GameplayManagers m_GameplayManagers;
+
+    [SerializeField]
+    private float m_LerpSlowTime = 0.1f;
+    [SerializeField]
+    private float m_ExtraSlowTime = 0.1f;
+    [SerializeField]
+    private float m_SlowTimeMultiplier = 0.5f;
+
+    private void Awake()
+    {
+        m_GameplayManagers = GameplayManagers.Instance;
+    }
 
     private void Update()
     {
@@ -53,18 +67,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ApplyItemToPlayer(ItemSlotHandler.Item item)
+    internal int GetPlayerGold()
+    {
+        return m_PlayerBase.GetCurrentGold();
+    }
+
+    internal void AddGoldToPlayer(int gold)
+    {
+        m_PlayerBase.AddGold(gold);
+    }
+
+    public void ApplyItemToPlayer(Item item)
     {
         m_PlayerBase.ApplyItem(item);
     }
-    public bool IsAnyObstacle(int iterations, Vector2Int direction, Vector2Int startPos)
+
+    public bool IsAnyObstacle(Vector2Int direction, Vector2Int startPos, Vector2Int endPos)
     {
-        for (int i = 0; i < iterations; ++i)
+        startPos += direction;
+        while(endPos.x != startPos.x || endPos.y != startPos.y)
         {
-            startPos += direction;
+            if (startPos.x < 0 || startPos.x >= m_BoardSizeX || startPos.y < 0 || startPos.y >= m_BoardSizeY)
+                return false;
+
             if (m_OccupationData[startPos.x, startPos.y])
                 return true;
+            startPos += direction;
         }
+
         return false;
     }
 
@@ -87,8 +117,7 @@ public class GameManager : MonoBehaviour
 
         m_OccupationData = new bool[m_BoardSizeX, m_BoardSizeY];
 
-        RoomManager.ValidEncounter encounter = room.GetEncounter(node.m_Rarity);
-        SetupRoom(room, player, encounter);
+        SetupRoom(room, player, node.m_Rarity);
     }
 
     public bool IsValidPosition(int x, int y)
@@ -104,24 +133,43 @@ public class GameManager : MonoBehaviour
         float minDist = float.MaxValue;
         BoardElement closestElement = null;
         bool selectedIsAligned = false;
+        bool selectedIdBlocked = false;
+        int targetValue = 0;
 
         foreach(var entity in m_BoardElements)
         {
-            if (entity == null)
+            int currentTargetValue = 0;
+
+            if (entity == null || entity.GetElementType() == BoardElement.ELEMENT_TYPE.PLAYER)
                 continue;
 
             if (selectedIsAligned && entity.GetPosition().x != element.GetPosition().x && entity.GetPosition().y != element.GetPosition().y)
                 continue;
 
-            bool entityAligned = entity.GetPosition().x != element.GetPosition().x || entity.GetPosition().y != element.GetPosition().y;
+            bool entityAligned = entity.GetPosition().x == element.GetPosition().x || entity.GetPosition().y == element.GetPosition().y;
 
             float dist = Vector2.Distance(entity.GetPosition(), element.GetPosition());
 
-            if (dist < minDist || (!selectedIsAligned && entityAligned))
+            bool blocked = true;
+            
+            if (entityAligned)
+            {
+                currentTargetValue += 1;
+                Vector2 direct = new Vector2Int(entity.GetPosition().x - element.GetPosition().x, entity.GetPosition().y - element.GetPosition().y);
+                direct = direct.normalized;
+                Vector2Int direction = new Vector2Int((int)direct.x, (int)direct.y);
+                blocked = IsAnyObstacle(direction, element.GetPosition(), entity.GetPosition());
+                if (!blocked)
+                    currentTargetValue += 2;
+            }
+
+            if (currentTargetValue > targetValue || (currentTargetValue == targetValue && dist < minDist))
             {
                 selectedIsAligned = entityAligned;
                 closestElement = entity;
                 minDist = dist;
+                selectedIdBlocked = blocked;
+                targetValue = currentTargetValue;
             }
         }
 
@@ -142,6 +190,28 @@ public class GameManager : MonoBehaviour
             else
                 return new Vector2Int(0, -1);
         }
+    }
+
+    internal void SlowTime()
+    {
+        if (m_CurrentSlowTime == null)
+            m_CurrentSlowTime = StartCoroutine(SlowTimeCoroutine());
+    }
+
+    private IEnumerator SlowTimeCoroutine()
+    {
+        float t = 0;
+        while (t < m_LerpSlowTime)
+        {
+            t += Time.deltaTime;
+            m_GameplayManagers.m_TimeMultiplier = Mathf.Lerp(1, m_SlowTimeMultiplier, t / m_LerpSlowTime);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(m_ExtraSlowTime);
+
+        m_GameplayManagers.m_TimeMultiplier = 1;
+        m_CurrentSlowTime = null;
     }
 
     internal Vector2Int GetPlayerDirection(BoardElement element)
@@ -167,7 +237,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetupRoom(RoomManager roomManager, RoomEntity player, RoomManager.ValidEncounter encounter)
+    public void SetupRoom(RoomManager roomManager, RoomEntity player, LevelManager.MapNode.RARITY encounterRarity)
     {
         if (m_CurrentRoom != null)
         {
@@ -176,7 +246,9 @@ public class GameManager : MonoBehaviour
         }
 
         m_CurrentRoom = Instantiate(roomManager, m_BoardTransform);
+
         m_CurrentRoom.Initialize();
+        RoomManager.ValidEncounter encounter = m_CurrentRoom.GetEncounter(encounterRarity);
 
         GameObject playerObject = Instantiate(player.m_EntityGameObject, m_CurrentRoom.GetPlayerTransform());
         playerObject.transform.SetParent(m_CurrentRoom.GetPlayerTransform());
@@ -247,5 +319,5 @@ public abstract class BoardElement : MonoBehaviour
     public abstract void SetPosition(int x, int y);
     public abstract Vector2Int GetPosition();
     public abstract ELEMENT_TYPE GetElementType();
-    public abstract void ApplyDamage(int damage);
+    public abstract void ApplyDamage(float damage);
 }

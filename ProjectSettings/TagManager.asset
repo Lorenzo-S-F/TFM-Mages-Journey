@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Projectile
   - Enemy
+  - Obstacle
   layers:
   - Default
   - TransparentFX
@@ -49,9 +50,15 @@ TagManager:
   - name: ParticlesBehind
     uniqueID: 750953769
     locked: 0
+  - name: Projectiles
+    uniqueID: 2794351515
+    locked: 0
   - name: Entities
     uniqueID: 2887689807
     locked: 0
   - name: ParticlesTop
     uniqueID: 712051387
+    locked: 0
+  - name: UI
+    uniqueID: 2918514123
     locked: 0

@@ -9,6 +9,13 @@ public class PopupController : MonoBehaviour
     public float m_AnimationSpeed = 1;
     public float m_ResizeScale = 1;
 
+    private void Awake()
+    {
+        m_PopupCanvas.alpha = 0;
+        m_PopupCanvas.interactable = false;
+        m_PopupCanvas.blocksRaycasts = false;
+    }
+
     public void OnEntry()
     {
         StartCoroutine(OnEntryAnimation());
@@ -18,6 +25,7 @@ public class PopupController : MonoBehaviour
     {
         m_PopupCanvas.alpha = 1;
         m_PopupCanvas.interactable = false;
+        m_PopupCanvas.blocksRaycasts = true;
 
         float t = 0;
         Vector3 initScale = transform.localScale;
@@ -39,10 +47,12 @@ public class PopupController : MonoBehaviour
 
         transform.localScale = initScale;
         m_PopupCanvas.interactable = true;
+        
     }
 
     public void ClosePopup()
     {
+        m_PopupCanvas.blocksRaycasts = false;
         PopupsManager.Instance.ClosePopup();
     }
 }

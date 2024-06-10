@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2110177916222459646}
   - component: {fileID: 842274293613518858}
   m_Layer: 0
-  m_Name: Slime
+  m_Name: SlimeStatic
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 7fee6a3990cdc1848aaa763f795208d7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -74,10 +74,10 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1407277489
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 1981356164, guid: 76830f5a7a019b443905384b30f0ff53, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.42352942, g: 0.99215686, b: 0.7058824, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -152,6 +152,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6856491898862006880}
     m_Modifications:
+    - target: {fileID: 402497085762317618, guid: 2a391e234d8976c43bf78a937e479cb2, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.7058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 402497085762317618, guid: 2a391e234d8976c43bf78a937e479cb2, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.99215686
+      objectReference: {fileID: 0}
+    - target: {fileID: 402497085762317618, guid: 2a391e234d8976c43bf78a937e479cb2, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.42352942
+      objectReference: {fileID: 0}
     - target: {fileID: 402497085762317618, guid: 2a391e234d8976c43bf78a937e479cb2, type: 3}
       propertyPath: ColorModule.gradient.maxGradient.atime0
       value: 0

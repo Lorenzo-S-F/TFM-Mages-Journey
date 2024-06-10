@@ -11,13 +11,19 @@ public class UpDownMove : MonoBehaviour
 
     private bool m_GoingToMax = true;
     private float m_T;
+    private GameplayManagers m_GameplayManager;
+
+    private void Awake()
+    {
+        m_GameplayManager = GameplayManagers.Instance;
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (m_GoingToMax)
         {
-            m_T += Time.deltaTime;
+            m_T += (Time.deltaTime * m_GameplayManager.m_TimeMultiplier);
             transform.localPosition = Vector3.Lerp(m_MinPos, m_MaxPos, m_T);
             if (m_T >= 1)
             {
@@ -27,7 +33,7 @@ public class UpDownMove : MonoBehaviour
         }
         else
         {
-            m_T += Time.deltaTime;
+            m_T += (Time.deltaTime * m_GameplayManager.m_TimeMultiplier);
             transform.localPosition = Vector3.Lerp(m_MaxPos, m_MinPos, m_T);
             if (m_T >= 1)
             {

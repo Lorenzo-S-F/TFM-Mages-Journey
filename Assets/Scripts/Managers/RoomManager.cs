@@ -33,10 +33,19 @@ public class RoomManager : MonoBehaviour
         switch (m_RoomType)
         {
             case LevelManager.MapNode.ROOM_TYPE.SHOP:
+
+                var avaliableItems = m_GamepolayManagers.m_LevelManager.GetItemPool();
+                foreach (var slot in m_AvaliableSlots)
+                {
+                    int itemNumber = RandomNumberGenerator.GetInt32(0, avaliableItems.Count);
+                    slot.SetItem(avaliableItems[itemNumber].Value);
+                    avaliableItems.RemoveAt(itemNumber);
+                }
+
                 break;
             case LevelManager.MapNode.ROOM_TYPE.ITEM:
 
-                var avaliableItems = m_GamepolayManagers.m_LevelManager.GetItemPool();
+                avaliableItems = m_GamepolayManagers.m_LevelManager.GetItemPool();
                 foreach(var slot in m_AvaliableSlots)
                 {
                     int itemNumber = RandomNumberGenerator.GetInt32(0, avaliableItems.Count);
@@ -45,6 +54,20 @@ public class RoomManager : MonoBehaviour
                 }
 
                 break;
+        }
+
+        List<ValidEncounter.MapEnemy> obstacles = new List<ValidEncounter.MapEnemy>();
+        foreach (Transform child in m_GridTransform)
+            obstacles.Add(new ValidEncounter.MapEnemy()
+            {
+                m_StartPosition = new Vector2Int((m_RoomSize.x - 1) / 2 + (int)child.localPosition.x, (m_RoomSize.y + 2) / 2 + (int)child.localPosition.y),
+                m_EnemyData = new RoomEntity() { m_Type = RoomEntity.ENTITY_TYPE.OBSTACLE }
+            });
+
+        foreach (var combat in m_AvaliablePositions)
+        {
+            foreach (var element in obstacles)
+                combat.m_RoomEnemies.Add(element);
         }
     }
 

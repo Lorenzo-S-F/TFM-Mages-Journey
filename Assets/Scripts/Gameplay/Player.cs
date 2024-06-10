@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,17 +10,32 @@ public class Player : BoardElement
     private Transform m_Transform;
     [SerializeField]
     private HPHandler m_HPHandler;
+    [SerializeField]
+    private GoldHandler m_GoldHandler;
 
     private bool m_Dashing = false;
     private Coroutine m_DashCoroutine;
     private RoomEntity m_CurrentPlayerEntity;
     private EntityStats m_CurrentEntityStats;
+    private GameplayManagers m_GameplayManagers;
     private GameManager m_GameManager;
     private bool m_Initialized = false;
+    private float m_DashTimeInmunnity = 0;
+    private Material m_Material;
+    private float m_ShootCooldown = 0f;
+
+    private int m_TotalGold = 0;
 
     private void Awake()
     {
+        m_GameplayManagers = GameplayManagers.Instance;
         m_GameManager = GameplayManagers.Instance.m_GameManager;
+    }
+
+    private void Update()
+    {
+        if (m_ShootCooldown > 0)
+            m_ShootCooldown -= Time.deltaTime * m_GameplayManagers.m_TimeMultiplier;
     }
 
     public EntityStats GetPlayerStats()
@@ -43,13 +59,30 @@ public class Player : BoardElement
         m_CurrentPlayerEntity = entity;
 
         m_CurrentEntityStats = new EntityStats();
+        m_CurrentEntityStats.m_AttackProjectileTime = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_AttackProjectileTime;
         m_CurrentEntityStats.m_AttackSpeed = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_AttackSpeed;
-        m_CurrentEntityStats.m_Damage = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Damage;
-        m_CurrentEntityStats.m_HP = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP;
         m_CurrentEntityStats.m_ShotSpeed = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_ShotSpeed;
+        m_CurrentEntityStats.m_Damage = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Damage;
         m_CurrentEntityStats.m_Speed = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Speed;
+        m_CurrentEntityStats.m_HP = m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP;
+
+        entity.m_Entity = Instantiate(entity.m_Entity);
+
+        m_TotalGold = entity.m_Entity.m_GoldOnDeath;
+        m_GoldHandler.SetCurrentGold(m_TotalGold);
 
         m_HPHandler.Initialize(m_CurrentEntityStats.m_HP);
+    }
+
+    internal int GetCurrentGold()
+    {
+        return m_TotalGold;
+    }
+
+    internal void AddGold(int gold)
+    {
+        m_TotalGold += gold;
+        m_GoldHandler.SetCurrentGold(m_TotalGold);
     }
 
     public override Vector2Int GetPosition()
@@ -60,6 +93,11 @@ public class Player : BoardElement
     public void InitializeTransform(Transform playerTransform)
     {
         m_Transform = playerTransform;
+#if UNITY_EDITOR
+        m_Material = m_Transform.GetChild(0).GetComponent<SpriteRenderer>().material;
+#else
+        m_Material = m_Transform.GetChild(0).GetComponent<SpriteRenderer>().sharedMaterial;
+#endif
     }        
 
     public override void SetPosition(int x, int y)
@@ -77,30 +115,36 @@ public class Player : BoardElement
     {
         return ELEMENT_TYPE.PLAYER;
     }
-    #endregion
+#endregion
 
-    #region PLAYER_ACTIONS
+#region PLAYER_ACTIONS
 
     public void Shoot()
     {
+        if (m_ShootCooldown > 0)
+            return;
+
         if (m_Dashing || m_Transform == null)
             return;
 
         Vector2Int dir = m_GameManager.GetMostAlignedDirection(this);
-        GameObject attack = Instantiate(m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_Projectile, GameplayManagers.Instance.m_GameManager.m_ProjectilesTransform);
-        attack.transform.localPosition = m_Transform.position;
 
-        var bullets = attack.GetComponentsInChildren<Attack>().ToList();
-        var extraAttack = attack.GetComponent<Attack>();
+        StartCoroutine(ShotSystem.ShootPattern(
+            m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_AttackPattern,
+            m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_Projectile,
+            this,
+            dir,
+            1,
+            GameplayManagers.Instance.m_GameManager.m_ProjectilesTransform,
+            (parent, projectile, distanceToEntity, bulletParent, rotatedDisplacement, direction) =>
+            {
+                GameObject attack = Instantiate(projectile, m_Transform.position + rotatedDisplacement * distanceToEntity, Quaternion.identity, bulletParent);
+                var bullets = attack.GetComponentsInChildren<Attack>().ToList();
 
-        if (extraAttack != null)
-            bullets.Add(extraAttack);
-
-        for (int i = 0; i < bullets.Count; ++i)
-            bullets[i].Initialize(m_CurrentPlayerEntity.m_Entity.m_AttackData[0], dir, m_CurrentEntityStats, "Player");
-
-        if (dir.x != 0)
-            attack.gameObject.transform.Rotate(new Vector3(0, 0, 90));
+                for (int i = 0; i < bullets.Count; ++i)
+                    bullets[i].Initialize(m_CurrentPlayerEntity.m_Entity.m_AttackData[0], direction, m_CurrentEntityStats, "Player", m_CurrentPlayerEntity.m_Entity.m_AttackModifications);
+            }
+            ));
     }
 
     public void Dash(Vector2Int _direction)
@@ -112,10 +156,20 @@ public class Player : BoardElement
         }
     }
 
+    internal bool IsDashInmune()
+    {
+        if (m_DashTimeInmunnity > Time.time)
+            return true;
+
+        return false;
+    }
+
     private IEnumerator DashCoroutine(Vector2Int _direction)
     {
         if (m_Dashing)
             yield break;
+
+        m_DashTimeInmunnity = Time.time + m_CurrentEntityStats.m_Speed;
 
         m_CurrentPlayerEntity.m_Position += _direction;
         m_Dashing = true;
@@ -128,7 +182,7 @@ public class Player : BoardElement
         {
             yield return null;
 
-            t += Time.deltaTime * m_CurrentEntityStats.m_Speed;
+            t += Time.deltaTime * m_CurrentEntityStats.m_Speed * m_GameplayManagers.m_TimeMultiplier;
 
             smoothValue = Mathf.SmoothStep(0, 1, t);
             m_Transform.localPosition = startPosition + new Vector3(_direction.x * smoothValue, _direction.y * smoothValue, 0);
@@ -140,37 +194,80 @@ public class Player : BoardElement
         m_Dashing = false;
     }
 
-    public override void ApplyDamage(int damage)
+    public override void ApplyDamage(float damage)
     {
-        m_CurrentEntityStats.m_HP -= damage;
+        m_CurrentEntityStats.m_HP -= Mathf.RoundToInt(damage);
         m_HPHandler.ModifyCurrentHP(m_CurrentEntityStats.m_HP);
         if (m_CurrentEntityStats.m_HP <= 0)
         {
             Destroy(gameObject);
         }
+        else
+            StartCoroutine(ReceiveDamageMat());
     }
-    #endregion
+#endregion
 
-    #region EXTERNAL_ACTIONS
+#region EXTERNAL_ACTIONS
 
-    public void ApplyItem(ItemSlotHandler.Item item)
+    public void ApplyItem(Item item)
     {
-        m_CurrentEntityStats.m_AttackSpeed += item.m_PlaneStatModifiers.m_AttackSpeed;
-        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_AttackSpeed += item.m_PlaneStatModifiers.m_AttackSpeed;
+        foreach (var type in item.m_ItemType)
+        {
+            switch (type)
+            {
+                case Item.ITEM_TYPE.STATS_MODIFIER_INCREASER:
+                    m_CurrentEntityStats.m_AttackSpeed += item.m_PlaneStatModifiers.m_AttackSpeed;
+                    m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_AttackSpeed += item.m_PlaneStatModifiers.m_AttackSpeed;
 
-        m_CurrentEntityStats.m_Damage += item.m_PlaneStatModifiers.m_Damage;
-        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Damage += item.m_PlaneStatModifiers.m_Damage;
+                    m_CurrentEntityStats.m_Damage += item.m_PlaneStatModifiers.m_Damage;
+                    m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Damage += item.m_PlaneStatModifiers.m_Damage;
 
-        m_CurrentEntityStats.m_HP += item.m_PlaneStatModifiers.m_HP;
-        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP += item.m_PlaneStatModifiers.m_HP;
-        m_HPHandler.ModifyAmount(m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP, m_CurrentEntityStats.m_HP);
+                    m_CurrentEntityStats.m_HP += item.m_PlaneStatModifiers.m_HP;
+                    m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP += item.m_PlaneStatModifiers.m_HP;
+                    m_HPHandler.ModifyAmount(m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP, m_CurrentEntityStats.m_HP);
 
-        m_CurrentEntityStats.m_ShotSpeed += item.m_PlaneStatModifiers.m_ShotSpeed;
-        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_ShotSpeed += item.m_PlaneStatModifiers.m_ShotSpeed;
+                    m_CurrentEntityStats.m_ShotSpeed += item.m_PlaneStatModifiers.m_ShotSpeed;
+                    m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_ShotSpeed += item.m_PlaneStatModifiers.m_ShotSpeed;
 
-        m_CurrentEntityStats.m_Speed += item.m_PlaneStatModifiers.m_Speed;
-        m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Speed += item.m_PlaneStatModifiers.m_Speed;
+                    m_CurrentEntityStats.m_Speed += item.m_PlaneStatModifiers.m_Speed;
+                    m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Speed += item.m_PlaneStatModifiers.m_Speed;
+
+                    m_CurrentEntityStats.m_AttackProjectileTime += item.m_PlaneStatModifiers.m_AttackProjectileTime;
+                    m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_AttackProjectileTime += item.m_PlaneStatModifiers.m_AttackProjectileTime;
+                    break;
+                case Item.ITEM_TYPE.STATS_MODIFIER_MULTIPLIER:
+                    m_CurrentEntityStats.m_AttackProjectileTime += m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_AttackProjectileTime * item.m_PlaneStatModifiers.m_AttackProjectileTime;
+                    m_CurrentEntityStats.m_AttackSpeed += m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_AttackSpeed * item.m_PlaneStatModifiers.m_AttackSpeed;
+                    m_CurrentEntityStats.m_ShotSpeed += m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_ShotSpeed * item.m_PlaneStatModifiers.m_ShotSpeed;
+                    m_CurrentEntityStats.m_Damage += m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Damage * item.m_PlaneStatModifiers.m_Damage;
+                    m_CurrentEntityStats.m_Speed += m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_Speed * item.m_PlaneStatModifiers.m_Speed;
+                    m_CurrentEntityStats.m_HP += m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP * item.m_PlaneStatModifiers.m_HP;
+
+                    m_HPHandler.ModifyAmount(m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP, m_CurrentEntityStats.m_HP);
+                    break;
+                case Item.ITEM_TYPE.SHOT_MODIFIER:
+                    m_CurrentPlayerEntity.m_Entity.m_AttackModifications.Add(item.m_Modification);
+                    break;
+                case Item.ITEM_TYPE.SHOT_SUBSTITUTE:
+                    m_CurrentPlayerEntity.m_Entity.m_AttackData[0] = item.m_NewAttack;
+                    break;
+                case Item.ITEM_TYPE.HEAL:
+                    m_CurrentEntityStats.m_HP = Mathf.Min(m_CurrentEntityStats.m_HP + item.m_HealAmount, m_CurrentPlayerEntity.m_Entity.m_EntityStats.m_HP);
+                    m_HPHandler.ModifyCurrentHP(m_CurrentEntityStats.m_HP);
+                    break;
+                case Item.ITEM_TYPE.HABILITY:
+                    // Set player hability
+                    break;
+            }
+        }
     }
 
-    #endregion
+    private IEnumerator ReceiveDamageMat()
+    {
+        m_Material.SetFloat("_InterpolationValue", 1);
+        yield return new WaitForSeconds(0.05f);
+        m_Material.SetFloat("_InterpolationValue", 0);
+    }
+
+#endregion
 }

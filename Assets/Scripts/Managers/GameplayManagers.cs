@@ -13,6 +13,9 @@ public class GameplayManagers : Singleton<GameplayManagers>
     public RoomSelectionManager m_SelectionManager;
 
     public CommonButtonHandler m_AcceptButton;
+    public CommonButtonHandler m_BuyButton;
+    public CommonButtonHandler m_ExitButton;
+    public float m_TimeMultiplier = 1;
 
     public IEnumerator Initialize()
     {
@@ -32,15 +35,29 @@ public class GameplayManagers : Singleton<GameplayManagers>
 
     private IEnumerator LoadNextRoom(int roomIndex)
     {
-        yield return m_SelectionManager.HideSelection();
+        RoomManager room = null; 
+        LevelManager.MapNode node;
+        yield return m_SelectionManager.HideSelection(
+            () => 
+            {
+                (room, node) = m_LevelManager.GetRoom(roomIndex);
+                m_GameManager.InitializeGame(room, node, m_GameManager.GetPlayerEntity());
+            }
+        );
 
-        (RoomManager room, LevelManager.MapNode node) = m_LevelManager.GetRoom(roomIndex);
-        m_GameManager.InitializeGame(room, node, m_GameManager.GetPlayerEntity());
-        yield return null;
+        if (room.GetRoomType() == LevelManager.MapNode.ROOM_TYPE.SHOP || room.GetRoomType() == LevelManager.MapNode.ROOM_TYPE.ITEM)
+            ShowExitButton(
+                () => 
+                {
+                    StartCoroutine(ShowNextRoomOptions());
+                });
     }
 
     public IEnumerator ShowNextRoomOptions()
     {
+        HideAcceptButton();
+        HideBuyButton();
+        HideExitButton();
         yield return m_SelectionManager.SetupSelection(m_LevelManager.GetNextLayerMapNodes());
     }
 
@@ -56,5 +73,35 @@ public class GameplayManagers : Singleton<GameplayManagers>
     {
         m_AcceptButton.gameObject.SetActive(false);
         m_AcceptButton.m_OnClick.RemoveAllListeners();
+    }
+
+
+    public void ShowBuyButton(UnityAction onClick)
+    {
+        m_BuyButton.gameObject.SetActive(true);
+        m_BuyButton.m_OnClick.RemoveAllListeners();
+        m_BuyButton.m_OnClick.AddListener(onClick);
+        m_BuyButton.m_OnClick.AddListener(() => m_AcceptButton.gameObject.SetActive(false));
+    }
+
+    public void HideBuyButton()
+    {
+        m_BuyButton.gameObject.SetActive(false);
+        m_BuyButton.m_OnClick.RemoveAllListeners();
+    }
+
+
+    public void ShowExitButton(UnityAction onClick)
+    {
+        m_ExitButton.gameObject.SetActive(true);
+        m_ExitButton.m_OnClick.RemoveAllListeners();
+        m_ExitButton.m_OnClick.AddListener(onClick);
+        m_ExitButton.m_OnClick.AddListener(() => m_AcceptButton.gameObject.SetActive(false));
+    }
+
+    public void HideExitButton()
+    {
+        m_ExitButton.gameObject.SetActive(false);
+        m_ExitButton.m_OnClick.RemoveAllListeners();
     }
 }

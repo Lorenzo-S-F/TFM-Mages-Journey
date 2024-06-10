@@ -4,12 +4,13 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerDownHandler
+public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
     private Player m_PlayerReference;
     private Vector2 m_StartDragPos;
     private float m_ClickDownTime;
-    //private bool m_Dragging = false;
+    private float m_ClickCooldown;
+    private bool m_BufferedShot;
 
     public void SetPlayer(Player player)
     {
@@ -19,11 +20,6 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
     public void OnBeginDrag(PointerEventData eventData)
     {
         m_StartDragPos = eventData.position;
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        //throw new System.NotImplementedException();
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -73,19 +69,46 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
             }
 
         }
-
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if ((Time.time - m_ClickDownTime) > 0.12f)
-            return;
-
-        m_PlayerReference.Shoot();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         m_ClickDownTime = Time.time;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (Time.time - m_ClickCooldown > 0.08f)
+        {
+            if (Time.time < m_ClickCooldown)
+            {
+                m_ClickCooldown = Time.time + 0.2f;
+                m_PlayerReference.Shoot();
+            }
+            else
+            {
+                m_BufferedShot = true;
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (m_BufferedShot && Time.time - m_ClickDownTime > 0.04f)
+        {
+            m_ClickDownTime = Time.time + 0.2f;
+            m_PlayerReference.Shoot();
+            m_BufferedShot = false;
+        }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+
     }
 }

@@ -6,31 +6,44 @@ using UnityEngine;
 
 public class Enemy : BoardElement
 {
-    private RoomEntity m_CurrentRoomEntity;
-    private float m_ActionCooldown = 0;
     private GameManager m_GameManager;
+    private RoomEntity m_CurrentRoomEntity;
     private RoomEntity m_PlayerEntity;
-    private bool m_Moving = false;
+
+    private float m_ActionCooldown = 0;
     private bool m_Initialized = false;
+    private bool m_Moving = false;
+
+    private Material m_Material;
 
     private bool m_Dashing = false;
-    private Coroutine m_DashCoroutine;
+    private GameplayManagers m_GameplayManagers;
 
     private void Awake()
     {
+#if UNITY_EDITOR
+        m_Material = GetComponent<SpriteRenderer>().material;
+#else
+        m_Material = GetComponent<SpriteRenderer>().sharedMaterial;
+#endif
+        m_GameplayManagers = GameplayManagers.Instance;
         m_GameManager = GameplayManagers.Instance.m_GameManager;
         m_PlayerEntity = m_GameManager.GetPlayerEntity();
     }
 
-    public override void ApplyDamage(int damage)
+    public override void ApplyDamage(float damage)
     {
-        m_CurrentRoomEntity.m_Entity.m_EntityStats.m_HP -= damage;
+        m_CurrentRoomEntity.m_Entity.m_EntityStats.m_HP -= Mathf.RoundToInt(damage);
         if (m_CurrentRoomEntity.m_Entity.m_EntityStats.m_HP <= 0)
         {
+            GameplayManagers.Instance.m_GameManager.AddGoldToPlayer(m_CurrentRoomEntity.m_Entity.m_GoldOnDeath);
             Destroy(gameObject);
         }
+        else
+            StartCoroutine(ReceiveDamageMat());
     }
 
+    private bool m_PlayerReachable = false;
     private void Update()
     {
         if (m_Dashing)
@@ -38,20 +51,27 @@ public class Enemy : BoardElement
 
         if (m_ActionCooldown > 0)
         {
-            m_ActionCooldown -= Time.deltaTime;
+            m_ActionCooldown -= (Time.deltaTime * m_GameplayManagers.m_TimeMultiplier);
             return;
         }
 
+        m_PlayerReachable = false;
         if ((m_PlayerEntity.m_Position.x == m_CurrentRoomEntity.m_Position.x || m_PlayerEntity.m_Position.y == m_CurrentRoomEntity.m_Position.y))
         {
+            int selectedShot = RandomNumberGenerator.GetInt32(0, m_CurrentRoomEntity.m_Entity.m_AttackData.Count);
+
             Vector2Int dir = m_GameManager.GetPlayerDirection(this);
-            if (!m_GameManager.IsAnyObstacle(Mathf.Abs(m_PlayerEntity.m_Position.y - m_CurrentRoomEntity.m_Position.y) - 1, dir, m_CurrentRoomEntity.m_Position))
+            if (!m_GameManager.IsAnyObstacle(dir, m_CurrentRoomEntity.m_Position, m_PlayerEntity.m_Position) 
+                || m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot].m_ThrowType == EntityAttack.THROW_TYPE.AIR
+                || m_CurrentRoomEntity.m_Entity.m_AttackModifications.FindIndex(z => z.m_Modification == Entity.Modification.MODIFICATION.OBSTACLE_INMUNE) != -1)
             {
-                Shoot(dir);
+                m_PlayerReachable = true;
+                Shoot(dir, selectedShot);
                 m_ActionCooldown = m_CurrentRoomEntity.m_Entity.m_AttackRate;
             }
         }
-        else
+
+        if (!m_PlayerReachable)
         {
             int idleRate = (int)(m_CurrentRoomEntity.m_Entity.m_IdleRate * 100);
             int moveRate = (int)(m_CurrentRoomEntity.m_Entity.m_MoveRate * 100);
@@ -82,7 +102,6 @@ public class Enemy : BoardElement
             else
                 m_ActionCooldown = m_CurrentRoomEntity.m_Entity.m_IdleTime;
         }
-
     }
 
     public override ELEMENT_TYPE GetElementType()
@@ -109,35 +128,35 @@ public class Enemy : BoardElement
         transform.localPosition = new Vector3(x, y, 0);
     }
 
-    public void Shoot(Vector2Int dir)
+    public void Shoot(Vector2Int dir, int selectedShot)
     {
         if (m_Moving || m_CurrentRoomEntity == null)
             return;
 
-        int selectedShot = RandomNumberGenerator.GetInt32(0, m_CurrentRoomEntity.m_Entity.m_AttackData.Count);
+        StartCoroutine(ShotSystem.ShootPattern(
+            m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot].m_AttackPattern,
+            m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot].m_Projectile,
+            this,
+            dir,
+            1,
+            GameplayManagers.Instance.m_GameManager.m_ProjectilesTransform,
+            (parent, projectile, distanceToEntity, bulletParent, rotatedDisplacement, direction) =>
+            {
+                GameObject attack = Instantiate(projectile, transform.position + rotatedDisplacement * distanceToEntity, Quaternion.identity, bulletParent);
+                var bullets = attack.GetComponentsInChildren<Attack>().ToList();
 
-        GameObject attack = Instantiate(m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot].m_Projectile, GameplayManagers.Instance.m_GameManager.m_ProjectilesTransform);
-        attack.transform.localPosition = transform.position;
+                for (int i = 0; i < bullets.Count; ++i)
+                    bullets[i].Initialize(m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot], direction, m_CurrentRoomEntity.m_Entity.m_EntityStats, "Enemy", m_CurrentRoomEntity.m_Entity.m_AttackModifications);
+            }
+            ));
 
-        var bullets = attack.GetComponentsInChildren<Attack>().ToList();
-        var extraAttack = attack.GetComponent<Attack>();
-        if (extraAttack != null)
-            bullets.Add(extraAttack);
-
-        for (int i = 0; i < bullets.Count; ++i)
-            bullets[i].Initialize(m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot], dir, m_CurrentRoomEntity.m_Entity.m_EntityStats, "Enemy");
-
-        if (dir.x != 0)
-            attack.gameObject.transform.Rotate(new Vector3(0, 0, 90));
     }
 
     public void Dash(Vector2Int _direction)
     {
         Vector2Int expectedDirection = m_CurrentRoomEntity.m_Position + _direction;
         if (m_GameManager.IsValidPosition(expectedDirection.x, expectedDirection.y))
-        {
-            m_DashCoroutine = StartCoroutine(DashCoroutine(_direction));
-        }
+            StartCoroutine(DashCoroutine(_direction));
     }
 
     private IEnumerator DashCoroutine(Vector2Int _direction)
@@ -156,15 +175,20 @@ public class Enemy : BoardElement
         {
             yield return null;
 
-            t += Time.deltaTime * m_CurrentRoomEntity.m_Entity.m_EntityStats.m_Speed;
+            t += Time.deltaTime * m_CurrentRoomEntity.m_Entity.m_EntityStats.m_Speed * m_GameplayManagers.m_TimeMultiplier;
 
             smoothValue = Mathf.SmoothStep(0, 1, t);
             transform.localPosition = startPosition + new Vector3(_direction.x * smoothValue, _direction.y * smoothValue, 0);
         }
 
         transform.localPosition = startPosition + new Vector3(_direction.x, _direction.y, 0);
-
-        m_DashCoroutine = null;
         m_Dashing = false;
+    }
+
+    private IEnumerator ReceiveDamageMat()
+    {
+        m_Material.SetFloat("_InterpolationValue", 1);
+        yield return new WaitForSeconds(0.05f);
+        m_Material.SetFloat("_InterpolationValue", 0);
     }
 }

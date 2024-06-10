@@ -11,7 +11,7 @@ public class LevelManager : MonoBehaviour
     public List<Pair<int, RoomManager>> m_EnemyRooms;
     public List<Pair<int, RoomManager>> m_ShopRooms;
     public List<Pair<int, RoomManager>> m_ItemRooms;
-    public List<Pair<int, ItemSlotHandler.Item>> m_AvaliableItems;
+    public List<Pair<int, Item>> m_AvaliableItems;
     public List<Pair<int, RoomManager>> m_BossRoom;
     public GenerationSpecs m_GenerationSpecs;
 
@@ -64,13 +64,13 @@ public class LevelManager : MonoBehaviour
         while (generated < 2)
         {
             int x = RandomNumberGenerator.GetInt32(0, m_MapSizeX);
-            int y = RandomNumberGenerator.GetInt32(1, m_MapSizeY - 1);
+            int y = RandomNumberGenerator.GetInt32(2, m_MapSizeY - 1);
 
             if (m_Map[x, y] == null && (usedY.FindIndex(element => element == y) == -1))
             {
                 MapNode newNode = new MapNode();
                 newNode.m_Rarity = m_GenerationSpecs.GetRandomRarity();
-                newNode.m_RoomType = MapNode.ROOM_TYPE.ENEMY;
+                newNode.m_RoomType = MapNode.ROOM_TYPE.SHOP;
                 m_Map[x, y] = newNode;
                 usedY.Add(y);
                 generated++;
@@ -119,12 +119,12 @@ public class LevelManager : MonoBehaviour
 #endif
     }
 
-    public List<Pair<int, ItemSlotHandler.Item>> GetItemPool()
+    public List<Pair<int, Item>> GetItemPool()
     {
         return m_AvaliableItems.FindAll(x => x.Key == m_CurrentGameWorld);
     }
 
-    public void RemoveItemFormPool(ItemSlotHandler.Item item)
+    public void RemoveItemFormPool(Item item)
     {
         m_AvaliableItems.RemoveAll(x => x.Value == item);
     }
@@ -294,18 +294,4 @@ public class LevelManager : MonoBehaviour
             START
         }        
     }
-
-    #region DEBUG
-#if UNITY_EDITOR
-    private void OnGUI()
-    {
-
-        /*if (GUI.Button(new Rect(0, 800, 200, 100), "Generate Level"))
-        {
-            GenerateLevel();
-        }*/
-    }
-#endif
-    #endregion
-
 }
