@@ -43,6 +43,7 @@ public class ItemSlotHandler : MonoBehaviour
                         m_GameplayManager.m_GameManager.AddGoldToPlayer(-m_Price);
                         GameplayManagers.Instance.HideAcceptButton();
                         m_ItemCollider.enabled = false;
+                        m_ItemSprite = null;
                     }
                 );
                 GameplayManagers.Instance.HideExitButton();
@@ -57,6 +58,8 @@ public class ItemSlotHandler : MonoBehaviour
                         m_GameplayManager.m_LevelManager.RemoveItemFormPool(m_ContainedItem);
                         StartCoroutine(m_GameplayManager.ShowNextRoomOptions());
                         m_ItemCollider.enabled = false;
+                        m_ItemSprite = null;
+                        m_DescText.text = string.Empty;
                     }
                 );
                 GameplayManagers.Instance.HideExitButton();
