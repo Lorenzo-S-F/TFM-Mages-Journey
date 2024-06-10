@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : BoardElement
 {
@@ -12,18 +13,20 @@ public class Player : BoardElement
     private HPHandler m_HPHandler;
     [SerializeField]
     private GoldHandler m_GoldHandler;
+    [SerializeField]
+    private SpecialAttackHandler m_SpecialAttackHandler;
 
-    private bool m_Dashing = false;
-    private Coroutine m_DashCoroutine;
+    private GameplayManagers m_GameplayManagers;
     private RoomEntity m_CurrentPlayerEntity;
     private EntityStats m_CurrentEntityStats;
-    private GameplayManagers m_GameplayManagers;
+    private Coroutine m_DashCoroutine;
     private GameManager m_GameManager;
+    private Material m_Material;
+
+    private bool m_Dashing = false;
     private bool m_Initialized = false;
     private float m_DashTimeInmunnity = 0;
-    private Material m_Material;
     private float m_ShootCooldown = 0f;
-
     private int m_TotalGold = 0;
 
     private void Awake()
@@ -121,6 +124,11 @@ public class Player : BoardElement
 
     public void Shoot()
     {
+        Shoot(m_CurrentPlayerEntity.m_Entity.m_AttackData[0]);
+    }
+
+    private void Shoot(EntityAttack attackData)
+    {
         if (m_ShootCooldown > 0)
             return;
 
@@ -130,8 +138,8 @@ public class Player : BoardElement
         Vector2Int dir = m_GameManager.GetMostAlignedDirection(this);
 
         StartCoroutine(ShotSystem.ShootPattern(
-            m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_AttackPattern,
-            m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_Projectile,
+            attackData.m_AttackPattern,
+            attackData.m_Projectile,
             this,
             dir,
             1,
@@ -142,7 +150,7 @@ public class Player : BoardElement
                 var bullets = attack.GetComponentsInChildren<Attack>().ToList();
 
                 for (int i = 0; i < bullets.Count; ++i)
-                    bullets[i].Initialize(m_CurrentPlayerEntity.m_Entity.m_AttackData[0], direction, m_CurrentEntityStats, "Player", m_CurrentPlayerEntity.m_Entity.m_AttackModifications);
+                    bullets[i].Initialize(attackData, direction, m_CurrentEntityStats, "Player", m_CurrentPlayerEntity.m_Entity.m_AttackModifications);
             }
             ));
     }
@@ -169,7 +177,7 @@ public class Player : BoardElement
         if (m_Dashing)
             yield break;
 
-        m_DashTimeInmunnity = Time.time + m_CurrentEntityStats.m_Speed;
+        m_DashTimeInmunnity = Time.time + (1.0f / m_CurrentEntityStats.m_Speed);
 
         m_CurrentPlayerEntity.m_Position += _direction;
         m_Dashing = true;
@@ -256,10 +264,15 @@ public class Player : BoardElement
                     m_HPHandler.ModifyCurrentHP(m_CurrentEntityStats.m_HP);
                     break;
                 case Item.ITEM_TYPE.HABILITY:
-                    // Set player hability
+                    m_SpecialAttackHandler.Initialize(item.m_ItemSprite, item.m_NewHability, this);
                     break;
             }
         }
+    }
+
+    public void ShootSpecialAttack()
+    {
+        Shoot(m_SpecialAttackHandler.GetSpecialAttack());
     }
 
     private IEnumerator ReceiveDamageMat()

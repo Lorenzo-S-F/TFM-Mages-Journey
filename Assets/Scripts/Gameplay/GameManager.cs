@@ -173,8 +173,13 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Vector2 dir = new Vector2Int(closestElement.GetPosition().x - element.GetPosition().x, closestElement.GetPosition().y - element.GetPosition().y);
-        dir = dir.normalized;
+
+        Vector2 dir = Vector2.up;
+        if (closestElement != null)
+        {
+            dir = new Vector2Int(closestElement.GetPosition().x - element.GetPosition().x, closestElement.GetPosition().y - element.GetPosition().y);
+            dir = dir.normalized;
+        }
 
         if (Math.Abs(dir.x) > Math.Abs(dir.y))
         {

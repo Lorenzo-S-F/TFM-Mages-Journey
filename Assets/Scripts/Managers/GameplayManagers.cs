@@ -22,9 +22,16 @@ public class GameplayManagers : Singleton<GameplayManagers>
         m_LevelManager.GenerateLevel();
         (RoomManager room, LevelManager.MapNode node) = m_LevelManager.GetRoom(0);
 
-        RoomEntity player = m_LevelManager.GetPlayerBase(0).Duplicate();
+        LevelManager.PlayerPreset player = m_LevelManager.GetPlayerBase(0).Duplicate();
 
-        m_GameManager.InitializeGame(room, node, player);
+        m_GameManager.InitializeGame(room, node, player.m_PlayerEntity);
+
+        foreach (var item in player.m_StartingItems)
+        {
+            m_GameManager.ApplyItemToPlayer(item);
+            m_LevelManager.RemoveItemFormPool(item);
+        }
+
         yield return null;
     }
 

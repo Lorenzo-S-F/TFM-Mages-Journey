@@ -7,7 +7,7 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
 
-    public List<Pair<int, RoomEntity>> m_AvaliablePlayers;
+    public List<Pair<int, PlayerPreset>> m_AvaliablePlayers;
     public List<Pair<int, RoomManager>> m_EnemyRooms;
     public List<Pair<int, RoomManager>> m_ShopRooms;
     public List<Pair<int, RoomManager>> m_ItemRooms;
@@ -15,7 +15,22 @@ public class LevelManager : MonoBehaviour
     public List<Pair<int, RoomManager>> m_BossRoom;
     public GenerationSpecs m_GenerationSpecs;
 
-    internal RoomEntity GetPlayerBase(int index)
+    [Serializable]
+    public class PlayerPreset
+    {
+        public RoomEntity m_PlayerEntity;
+        public List<Item> m_StartingItems;
+
+        public PlayerPreset Duplicate()
+        {
+            var preset = new PlayerPreset();
+            preset.m_PlayerEntity = m_PlayerEntity.Duplicate();
+            preset.m_StartingItems = m_StartingItems;
+            return preset;
+        }
+    }
+
+    internal PlayerPreset GetPlayerBase(int index)
     {
         return m_AvaliablePlayers[index].Value;
     }
