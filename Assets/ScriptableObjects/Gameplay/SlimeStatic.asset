@@ -28,7 +28,7 @@ MonoBehaviour:
   m_EntityStats:
     m_AttackProjectileTime: 4
     m_AttackSpeed: 0.8
-    m_ShotSpeed: 2.5
+    m_ShotSpeed: 2
     m_Damage: 1
     m_Speed: 2.25
     m_HP: 10
@@ -37,4 +37,5 @@ MonoBehaviour:
   m_MoveRate: 0
   m_IdleRate: 1.25
   m_IdleTime: 0.25
+  m_GoldOnDeath: 1
   m_AttackModifications: []

@@ -26,6 +26,11 @@ public class CommonButtonHandler : Selectable, IPointerClickHandler, IEventSyste
     private Coroutine m_DownCoroutine;
     private Coroutine m_UpCoroutine;
 
+    protected override void OnEnable()
+    {
+        m_ButtonImage.sprite = m_OnClickSprites[0];
+    }
+
     protected override void Start()
     {
         base.Start();

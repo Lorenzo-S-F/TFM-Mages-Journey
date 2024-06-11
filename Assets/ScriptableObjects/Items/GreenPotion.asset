@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec4b5de5eb3396468bd3b0a71b6aee7, type: 3}
   m_Name: GreenPotion
   m_EditorClassIdentifier: Assembly-CSharp::ItemSlotHandler/Item
-  m_Text: +1SSPD
+  m_Text: Increases Projectile speed by 1
   m_ItemSprite: {fileID: 485629473, guid: 80cefab8dd4ddb64aa6df158d702ab48, type: 3}
   m_PlaneStatModifiers:
     m_AttackProjectileTime: 0
@@ -39,4 +39,4 @@ MonoBehaviour:
       m_RepeatInterval: 0
     m_Projectile: {fileID: 0}
     m_ThrowType: 0
-  m_ItemType: 
+  m_ItemType: 00000000

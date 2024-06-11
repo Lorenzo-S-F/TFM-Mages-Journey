@@ -57,8 +57,9 @@ public class LevelManager : MonoBehaviour
         m_Map[m_MapSizeX / 2, m_MapSizeY - 1] = end;
 
         // Fixed Generation
-        // Two item rooms
+        // One item rooms
         int generated = 0;
+        List<int> usedY = new List<int>();
         while (generated < 2)
         {
             int x = RandomNumberGenerator.GetInt32(0, m_MapSizeX);
@@ -69,17 +70,17 @@ public class LevelManager : MonoBehaviour
                 newNode.m_Rarity = m_GenerationSpecs.GetRandomRarity();
                 newNode.m_RoomType = MapNode.ROOM_TYPE.ITEM;
                 m_Map[x, y] = newNode;
+                usedY.Add(y);
                 generated++;
             }
         }
 
-        // Two shop rooms
+        // One shop rooms
         generated = 0;
-        List<int> usedY = new List<int>();
         while (generated < 2)
         {
             int x = RandomNumberGenerator.GetInt32(0, m_MapSizeX);
-            int y = RandomNumberGenerator.GetInt32(2, m_MapSizeY - 1);
+            int y = RandomNumberGenerator.GetInt32(3, m_MapSizeY - 1);
 
             if (m_Map[x, y] == null && (usedY.FindIndex(element => element == y) == -1))
             {

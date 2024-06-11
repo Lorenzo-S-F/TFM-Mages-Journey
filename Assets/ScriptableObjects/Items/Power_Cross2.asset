@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fec4b5de5eb3396468bd3b0a71b6aee7, type: 3}
-  m_Name: DoubleShot
-  m_EditorClassIdentifier: Assembly-CSharp::ItemSlotHandler/Item
-  m_Text: Basic attack is changed by two consecutive shots
-  m_ItemSprite: {fileID: 934351758, guid: 80cefab8dd4ddb64aa6df158d702ab48, type: 3}
+  m_Name: Power_Cross2
+  m_EditorClassIdentifier: 
+  m_Text: Your Hability throws 2 waves of 4 projectiles in row and column
+  m_ItemSprite: {fileID: -1011557124, guid: 97e0afe4200371c4aa8931bedeb442a3, type: 3}
   m_PlaneStatModifiers:
     m_AttackProjectileTime: 4
     m_AttackSpeed: 0
@@ -27,28 +27,40 @@ MonoBehaviour:
     m_Modification: 0
   m_NewAttack:
     m_AttackPattern:
-      m_Directions:
-      - m_Dir:
-          Key: 0
-          Value: 1
-        m_Disp:
-          Key: 0.2
-          Value: 0
-      - m_Dir:
-          Key: 0
-          Value: 1
-        m_Disp:
-          Key: -0.2
-          Value: 0
-      m_RepeatAmount: 1
-      m_RepeatInterval: 0
-    m_Projectile: {fileID: 5085270326753100309, guid: fc411545af0b6cd40a33dd0bb13d015c, type: 3}
-    m_ThrowType: 1
-  m_NewHability:
-    m_AttackPattern:
       m_Directions: []
       m_RepeatAmount: 1
       m_RepeatInterval: 0
     m_Projectile: {fileID: 0}
     m_ThrowType: 0
-  m_ItemType: 03000000
+  m_NewHability:
+    m_AttackPattern:
+      m_Directions:
+      - m_Dir:
+          Key: 1
+          Value: 0
+        m_Disp:
+          Key: 0
+          Value: 0
+      - m_Dir:
+          Key: -1
+          Value: 0
+        m_Disp:
+          Key: 0
+          Value: 0
+      - m_Dir:
+          Key: 0
+          Value: 1
+        m_Disp:
+          Key: 0
+          Value: 0
+      - m_Dir:
+          Key: 0
+          Value: -1
+        m_Disp:
+          Key: 0
+          Value: 0
+      m_RepeatAmount: 2
+      m_RepeatInterval: 0.2
+    m_Projectile: {fileID: 5085270326753100309, guid: fc411545af0b6cd40a33dd0bb13d015c, type: 3}
+    m_ThrowType: 2
+  m_ItemType: 

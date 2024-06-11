@@ -33,6 +33,8 @@ public class ItemSlotHandler : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
+            GameplayManagers.Instance.ShowDescriptionText(m_ContainedItem.m_Text);
+
             if (m_IsShop && GameplayManagers.Instance.m_GameManager.GetPlayerGold() >= m_Price)
             {
                 GameplayManagers.Instance.ShowBuyButton(
@@ -43,7 +45,7 @@ public class ItemSlotHandler : MonoBehaviour
                         m_GameplayManager.m_GameManager.AddGoldToPlayer(-m_Price);
                         GameplayManagers.Instance.HideAcceptButton();
                         m_ItemCollider.enabled = false;
-                        m_ItemSprite = null;
+                        m_ItemSprite.sprite = null;
                     }
                 );
                 GameplayManagers.Instance.HideExitButton();
@@ -58,7 +60,7 @@ public class ItemSlotHandler : MonoBehaviour
                         m_GameplayManager.m_LevelManager.RemoveItemFormPool(m_ContainedItem);
                         StartCoroutine(m_GameplayManager.ShowNextRoomOptions());
                         m_ItemCollider.enabled = false;
-                        m_ItemSprite = null;
+                        m_ItemSprite.sprite = null;
                         m_DescText.text = string.Empty;
                     }
                 );
@@ -71,6 +73,8 @@ public class ItemSlotHandler : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
+            GameplayManagers.Instance.HideDecriptionText();
+
             if (m_IsShop)
             {
                 GameplayManagers.Instance.HideBuyButton();

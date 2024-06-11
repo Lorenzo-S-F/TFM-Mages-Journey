@@ -21,11 +21,7 @@ public class Enemy : BoardElement
 
     private void Awake()
     {
-#if UNITY_EDITOR
         m_Material = GetComponent<SpriteRenderer>().material;
-#else
-        m_Material = GetComponent<SpriteRenderer>().sharedMaterial;
-#endif
         m_GameplayManagers = GameplayManagers.Instance;
         m_GameManager = GameplayManagers.Instance.m_GameManager;
         m_PlayerEntity = m_GameManager.GetPlayerEntity();

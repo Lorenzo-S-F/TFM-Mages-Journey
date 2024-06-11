@@ -23,7 +23,8 @@ public class PopupController : MonoBehaviour
         GameplayManagers manager = GameplayManagers.Instance;
         if (manager != null)
         {
-            m_GameplayExtraButton.SetActive(true);
+            if (m_GameplayExtraButton != null)
+                m_GameplayExtraButton.SetActive(true);
             manager.m_TimeMultiplier = 0;
         }
         else
@@ -58,7 +59,6 @@ public class PopupController : MonoBehaviour
 
         transform.localScale = initScale;
         m_PopupCanvas.interactable = true;
-        
     }
 
     public void OnExitButtonClicked()
@@ -72,7 +72,8 @@ public class PopupController : MonoBehaviour
         GameplayManagers manager = GameplayManagers.Instance;
         if (manager != null)
         {
-            m_GameplayExtraButton.SetActive(false);
+            if (m_GameplayExtraButton != null)
+                m_GameplayExtraButton.SetActive(false);
             manager.m_TimeMultiplier = 1;
         }
 

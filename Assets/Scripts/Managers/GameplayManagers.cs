@@ -15,6 +15,7 @@ public class GameplayManagers : Singleton<GameplayManagers>
     public CommonButtonHandler m_AcceptButton;
     public CommonButtonHandler m_BuyButton;
     public CommonButtonHandler m_ExitButton;
+    public TextDisplayHandler m_TextDisplayer;
     public float m_TimeMultiplier = 1;
 
     public IEnumerator Initialize()
@@ -32,6 +33,7 @@ public class GameplayManagers : Singleton<GameplayManagers>
             m_LevelManager.RemoveItemFormPool(item);
         }
 
+        PopupsManager.Instance.TryOpenPopup(PopupsManager.POPUPS.TUTORIAL_GAMEPLAY);
         yield return null;
     }
 
@@ -47,6 +49,10 @@ public class GameplayManagers : Singleton<GameplayManagers>
         yield return m_SelectionManager.HideSelection(
             () => 
             {
+                HideAcceptButton();
+                HideExitButton();
+                HideBuyButton();
+                HideDecriptionText();
                 (room, node) = m_LevelManager.GetRoom(roomIndex);
                 m_GameManager.InitializeGame(room, node, m_GameManager.GetPlayerEntity());
             }
@@ -97,7 +103,6 @@ public class GameplayManagers : Singleton<GameplayManagers>
         m_BuyButton.m_OnClick.RemoveAllListeners();
     }
 
-
     public void ShowExitButton(UnityAction onClick)
     {
         m_ExitButton.gameObject.SetActive(true);
@@ -110,6 +115,17 @@ public class GameplayManagers : Singleton<GameplayManagers>
     {
         m_ExitButton.gameObject.SetActive(false);
         m_ExitButton.m_OnClick.RemoveAllListeners();
+    }
+
+    public void ShowDescriptionText(string text)
+    {
+        m_TextDisplayer.gameObject.SetActive(true);
+        m_TextDisplayer.SetText(text);
+    }
+
+    public void HideDecriptionText()
+    {
+        m_TextDisplayer.gameObject.SetActive(false);
     }
 
     public void OpenSettingsPopup()

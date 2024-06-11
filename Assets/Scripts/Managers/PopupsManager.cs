@@ -14,7 +14,8 @@ public class PopupsManager : Singleton<PopupsManager>
     public enum POPUPS
     {
         UNDEFINED = 0,
-        SETTINGS = 1
+        SETTINGS = 1,
+        TUTORIAL_GAMEPLAY = 2
     }
 
     public void TryOpenButtonCall(int popup)

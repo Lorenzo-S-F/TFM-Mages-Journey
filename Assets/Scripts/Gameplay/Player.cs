@@ -77,6 +77,11 @@ public class Player : BoardElement
         m_HPHandler.Initialize(m_CurrentEntityStats.m_HP);
     }
 
+    internal bool IsDashing()
+    {
+        return m_Dashing;
+    }
+
     internal int GetCurrentGold()
     {
         return m_TotalGold;
@@ -96,11 +101,7 @@ public class Player : BoardElement
     public void InitializeTransform(Transform playerTransform)
     {
         m_Transform = playerTransform;
-#if UNITY_EDITOR
         m_Material = m_Transform.GetChild(0).GetComponent<SpriteRenderer>().material;
-#else
-        m_Material = m_Transform.GetChild(0).GetComponent<SpriteRenderer>().sharedMaterial;
-#endif
     }        
 
     public override void SetPosition(int x, int y)
@@ -139,7 +140,7 @@ public class Player : BoardElement
 
         StartCoroutine(ShotSystem.ShootPattern(
             attackData.m_AttackPattern,
-            attackData.m_Projectile,
+            m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_Projectile,
             this,
             dir,
             1,
@@ -177,7 +178,7 @@ public class Player : BoardElement
         if (m_Dashing)
             yield break;
 
-        m_DashTimeInmunnity = Time.time + (1.0f / m_CurrentEntityStats.m_Speed);
+        m_DashTimeInmunnity = Time.time + ((1.0f / m_CurrentEntityStats.m_Speed) * 0.8f);
 
         m_CurrentPlayerEntity.m_Position += _direction;
         m_Dashing = true;
@@ -257,6 +258,7 @@ public class Player : BoardElement
                     m_CurrentPlayerEntity.m_Entity.m_AttackModifications.Add(item.m_Modification);
                     break;
                 case Item.ITEM_TYPE.SHOT_SUBSTITUTE:
+                    item.m_NewAttack.m_Projectile = m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_Projectile;
                     m_CurrentPlayerEntity.m_Entity.m_AttackData[0] = item.m_NewAttack;
                     break;
                 case Item.ITEM_TYPE.HEAL:

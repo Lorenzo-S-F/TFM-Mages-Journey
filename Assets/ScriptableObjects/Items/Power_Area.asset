@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec4b5de5eb3396468bd3b0a71b6aee7, type: 3}
   m_Name: Power_Area
   m_EditorClassIdentifier: 
-  m_Text: 
+  m_Text: Changes Hability for 8 projectiles shot in each direction
   m_ItemSprite: {fileID: -300375657, guid: 97e0afe4200371c4aa8931bedeb442a3, type: 3}
   m_PlaneStatModifiers:
     m_AttackProjectileTime: 0

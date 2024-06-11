@@ -25,18 +25,18 @@ public class RoomSelectionManager : MonoBehaviour
 
     public IEnumerator SetupSelection(List<MapNode> rooms)
     {
-        m_PanelContainer.gameObject.SetActive(true);
-        m_SelectorRoot.gameObject.SetActive(true);
-        m_PanelHider.gameObject.SetActive(true);
-
         Image image = m_PanelHider.GetComponent<Image>();
         image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
         m_Canvas.alpha = 0;
 
         yield return null;
 
+        m_PanelContainer.gameObject.SetActive(true);
+        m_SelectorRoot.gameObject.SetActive(true);
+        m_PanelHider.gameObject.SetActive(true);
+
         Vector3 endPos = m_PanelContainer.position;
-        Vector3 startPos = m_PanelContainer.position - new Vector3(0, 5, 0);
+        Vector3 startPos = m_PanelContainer.position - new Vector3(0, 7, 0);
 
         float t = 0;
         while (t < 1)
@@ -54,10 +54,18 @@ public class RoomSelectionManager : MonoBehaviour
 
         List<Pair<MapNode.ROOM_TYPE, MapNode.RARITY>> currentViewd = new List<Pair<MapNode.ROOM_TYPE, MapNode.RARITY>>();
 
+        int amountExtra = 3 - rooms.Count;
+
         for (int i = 0; i < rooms.Count; ++i)
         {
             if (currentViewd.FindIndex(x => (x.Key == rooms[i].m_RoomType && x.Value == rooms[i].m_Rarity)) != -1)
                 continue;
+
+            if (amountExtra > 0 && rooms[i].m_RoomType == MapNode.ROOM_TYPE.ENEMY)
+            {
+                amountExtra--;
+                continue;
+            }
             
             RoomSelectionHandler handler = Instantiate(m_SelectorReference, m_SelectorParent);
             yield return handler.Initialize(i, m_SpriteMapper.Find((x) => x.Key == rooms[i].m_RoomType).Value, RoomToText(rooms[i]));
@@ -71,7 +79,7 @@ public class RoomSelectionManager : MonoBehaviour
     {
         float t = 0;
         Vector3 startPos = m_PanelContainer.position;
-        Vector3 endPos = m_PanelContainer.position - new Vector3(0, 5, 0);
+        Vector3 endPos = m_PanelContainer.position - new Vector3(0, 7, 0);
 
         Image image = m_SelectorRoot.GetComponent<Image>();
         float startAlpha = image.color.a;
@@ -128,11 +136,11 @@ public class RoomSelectionManager : MonoBehaviour
         switch (node.m_RoomType)
         {
             case MapNode.ROOM_TYPE.SHOP:
-                return "SHOP (" + RarityToLetter(node.m_Rarity) + ")";
+                return "SHOP";
             case MapNode.ROOM_TYPE.ENEMY:
                 return "FIGHT (" + RarityToLetter(node.m_Rarity) + ")";
             case MapNode.ROOM_TYPE.ITEM:
-                return "ITEM (" + RarityToLetter(node.m_Rarity) + ")";
+                return "ITEM";
             case MapNode.ROOM_TYPE.BOSS:
                 return "BOSS (" + RarityToLetter(node.m_Rarity) + ")";
             case MapNode.ROOM_TYPE.START:
