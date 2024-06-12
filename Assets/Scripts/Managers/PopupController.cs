@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PopupController : MonoBehaviour
 {
@@ -36,8 +37,12 @@ public class PopupController : MonoBehaviour
     public IEnumerator OnEntryAnimation()
     {
         m_PopupCanvas.alpha = 1;
-        m_PopupCanvas.interactable = true;
         m_PopupCanvas.blocksRaycasts = true;
+
+        yield return null;
+
+        m_PopupCanvas.interactable = true;
+        Canvas.ForceUpdateCanvases();
 
         float t = 0;
         Vector3 initScale = transform.localScale;
@@ -70,14 +75,15 @@ public class PopupController : MonoBehaviour
     public void ClosePopup()
     {
         GameplayManagers manager = GameplayManagers.Instance;
+
+        if (m_GameplayExtraButton != null)
+            m_GameplayExtraButton.SetActive(true);
+
         if (manager != null)
-        {
-            if (m_GameplayExtraButton != null)
-                m_GameplayExtraButton.SetActive(false);
             manager.m_TimeMultiplier = 1;
-        }
 
         m_PopupCanvas.blocksRaycasts = false;
+        m_PopupCanvas.interactable = false;
         PopupsManager.Instance.ClosePopup();
     }
 }

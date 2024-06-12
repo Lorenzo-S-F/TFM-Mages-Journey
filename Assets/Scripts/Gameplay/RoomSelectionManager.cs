@@ -54,7 +54,7 @@ public class RoomSelectionManager : MonoBehaviour
 
         List<Pair<MapNode.ROOM_TYPE, MapNode.RARITY>> currentViewd = new List<Pair<MapNode.ROOM_TYPE, MapNode.RARITY>>();
 
-        int amountExtra = 3 - rooms.Count;
+        int amountExtra = rooms.Count - 3;
 
         for (int i = 0; i < rooms.Count; ++i)
         {

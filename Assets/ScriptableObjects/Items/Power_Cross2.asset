@@ -63,4 +63,4 @@ MonoBehaviour:
       m_RepeatInterval: 0.2
     m_Projectile: {fileID: 5085270326753100309, guid: fc411545af0b6cd40a33dd0bb13d015c, type: 3}
     m_ThrowType: 2
-  m_ItemType: 
+  m_ItemType: 05000000

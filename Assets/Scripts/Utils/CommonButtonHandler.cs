@@ -29,6 +29,7 @@ public class CommonButtonHandler : Selectable, IPointerClickHandler, IEventSyste
     protected override void OnEnable()
     {
         m_ButtonImage.sprite = m_OnClickSprites[0];
+        m_ChildObjects.localPosition = new Vector3(m_ChildObjects.localPosition.x, m_ObjectsCurve.Evaluate(0), m_ChildObjects.localPosition.z);
     }
 
     protected override void Start()
