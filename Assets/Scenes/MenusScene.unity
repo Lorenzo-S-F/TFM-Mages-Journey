@@ -2079,17 +2079,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39df65df8aa8d6c4fa985a616893c0f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SelectorData:
-  - Key: Dash and shot speed increased. 8HP
-    Value: {fileID: -1196563131, guid: 82a07a9d9cfaf50438c370b5fb8f2c78, type: 3}
-  - Key: Increased damage and shot speed. 5HP
-    Value: {fileID: -1880980991, guid: 8407da689e1e06440a9c5bd448810b48, type: 3}
-  - Key: Increased shot speed and damage. 10HP
-    Value: {fileID: 18425917, guid: ff29263b41baed440a0a195e52671f30, type: 3}
-  - Key: Increased health, lowered speed and damage. 14HP
-    Value: {fileID: -718567401, guid: 8c2c41eed887a6f4291b204876ca39ea, type: 3}
+  m_MagesData:
+  - m_Info: Dash and shot speed increased. 8HP
+    m_Name: Speedy Mage
+    m_Image: {fileID: -1196563131, guid: 82a07a9d9cfaf50438c370b5fb8f2c78, type: 3}
+  - m_Info: Increased damage and shot speed. 5HP
+    m_Name: Assasin Mage
+    m_Image: {fileID: -1880980991, guid: 8407da689e1e06440a9c5bd448810b48, type: 3}
+  - m_Info: Increased shot speed and damage. 10HP
+    m_Name: Sniper Mage
+    m_Image: {fileID: 18425917, guid: ff29263b41baed440a0a195e52671f30, type: 3}
+  - m_Info: Increased health, lowered speed and damage. 14HP
+    m_Name: Healthy Mage
+    m_Image: {fileID: -718567401, guid: 8c2c41eed887a6f4291b204876ca39ea, type: 3}
   m_CharacterDescription: {fileID: 517149295}
   m_CharacterImage: {fileID: 2002205602}
+  m_MageTitle: {fileID: 1627065192}
 --- !u!1 &893946429
 GameObject:
   m_ObjectHideFlags: 0

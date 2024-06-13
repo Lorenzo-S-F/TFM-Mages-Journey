@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,14 +7,24 @@ using UnityEngine.UI;
 public class CharacterSelectorHandler : MonoBehaviour
 {
     [SerializeField]
-    private List<LevelManager.Pair<string, Sprite>> m_SelectorData;
+    private List<MageData> m_MagesData;
 
     [SerializeField]
     private TMPro.TextMeshProUGUI m_CharacterDescription;
 
     [SerializeField]
     private Image m_CharacterImage;
+    [SerializeField]
+    private TMPro.TextMeshProUGUI m_MageTitle;
     private int m_Current;
+
+    [Serializable]
+    public class MageData
+    {
+        public string m_Info;
+        public string m_Name;
+        public Sprite m_Image;
+    }
 
     private void Awake()
     {
@@ -23,15 +34,17 @@ public class CharacterSelectorHandler : MonoBehaviour
 
     private void SetView(int value)
     {
-        m_CharacterImage.sprite = m_SelectorData[value].Value;
-        m_CharacterDescription.text = m_SelectorData[value].Key;
-        m_Current = value;
+        m_CharacterDescription.text = m_MagesData[value].m_Info;
+        m_CharacterImage.sprite = m_MagesData[value].m_Image;
+        m_MageTitle.text = m_MagesData[value].m_Name;
+
         MainManagers.Instance.m_SelectedPlayerCharacter = value;
+        m_Current = value;
     }
 
     public void ViewNext()
     {
-        if (m_Current >= m_SelectorData.Count - 1)
+        if (m_Current >= m_MagesData.Count - 1)
             m_Current = 0;
         else
             m_Current++;
@@ -42,7 +55,7 @@ public class CharacterSelectorHandler : MonoBehaviour
     public void ViewPrevious()
     {
         if (m_Current <= 0)
-            m_Current = m_SelectorData.Count - 1;
+            m_Current = m_MagesData.Count - 1;
         else
             m_Current--;
 
