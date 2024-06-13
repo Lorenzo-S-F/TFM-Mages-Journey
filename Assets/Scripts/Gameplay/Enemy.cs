@@ -17,6 +17,7 @@ public class Enemy : BoardElement
     private Material m_Material;
 
     private bool m_Dashing = false;
+    private bool m_PlayerReachable = false;
     private GameplayManagers m_GameplayManagers;
 
     private void Awake()
@@ -40,7 +41,6 @@ public class Enemy : BoardElement
             StartCoroutine(ReceiveDamageMat());
     }
 
-    private bool m_PlayerReachable = false;
     private void Update()
     {
         if (m_Dashing)
@@ -53,18 +53,47 @@ public class Enemy : BoardElement
         }
 
         m_PlayerReachable = false;
-        if ((m_PlayerEntity.m_Position.x == m_CurrentRoomEntity.m_Position.x || m_PlayerEntity.m_Position.y == m_CurrentRoomEntity.m_Position.y))
+        bool alignedBySize = false;
+
+        for (int i = m_CurrentRoomEntity.m_Position.x - m_CurrentRoomEntity.m_Entity.m_ExtraSizeXNeg; i <= m_CurrentRoomEntity.m_Position.x + m_CurrentRoomEntity.m_Entity.m_ExtraSizeXPos; ++i)
+        {
+            if (alignedBySize)
+                break;
+
+            for (int j = m_CurrentRoomEntity.m_Position.y - m_CurrentRoomEntity.m_Entity.m_ExtraSizeYNeg; j <= m_CurrentRoomEntity.m_Position.y + m_CurrentRoomEntity.m_Entity.m_ExtraSizeYPos; ++j)
+            {
+                if (alignedBySize)
+                    break;
+
+                if (m_PlayerEntity.m_Position.x == i || m_PlayerEntity.m_Position.y == j)
+                    alignedBySize = true;
+            }
+        }
+
+        if (alignedBySize)
         {
             int selectedShot = RandomNumberGenerator.GetInt32(0, m_CurrentRoomEntity.m_Entity.m_AttackData.Count);
+            Vector2Int playerDir = m_GameManager.GetPlayerDirection(this);
 
-            Vector2Int dir = m_GameManager.GetPlayerDirection(this);
-            if (!m_GameManager.IsAnyObstacle(dir, m_CurrentRoomEntity.m_Position, m_PlayerEntity.m_Position) 
-                || m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot].m_ThrowType == EntityAttack.THROW_TYPE.AIR
-                || m_CurrentRoomEntity.m_Entity.m_AttackModifications.FindIndex(z => z.m_Modification == Entity.Modification.MODIFICATION.OBSTACLE_INMUNE) != -1)
+            for (int i = m_CurrentRoomEntity.m_Position.x - m_CurrentRoomEntity.m_Entity.m_ExtraSizeXNeg; i <= m_CurrentRoomEntity.m_Position.x + m_CurrentRoomEntity.m_Entity.m_ExtraSizeXPos; ++i)
             {
-                m_PlayerReachable = true;
-                Shoot(dir, selectedShot);
-                m_ActionCooldown = m_CurrentRoomEntity.m_Entity.m_AttackRate;
+                if (m_PlayerReachable)
+                    break;
+
+                for (int j = m_CurrentRoomEntity.m_Position.y - m_CurrentRoomEntity.m_Entity.m_ExtraSizeYNeg; j <= m_CurrentRoomEntity.m_Position.y + m_CurrentRoomEntity.m_Entity.m_ExtraSizeYPos; ++j)
+                {
+                    if (m_PlayerReachable)
+                        break;
+
+                    if (!m_GameManager.IsAnyObstacle(playerDir, new Vector2Int(i, j), m_PlayerEntity.m_Position)
+                        || m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot].m_ThrowType == EntityAttack.THROW_TYPE.AIR
+                        || m_CurrentRoomEntity.m_Entity.m_AttackModifications.FindIndex(z => z.m_Modification == Entity.Modification.MODIFICATION.OBSTACLE_INMUNE) != -1)
+                    {
+                        m_PlayerReachable = true;
+                        Shoot(playerDir, selectedShot);
+                        m_ActionCooldown = m_CurrentRoomEntity.m_Entity.m_AttackRate;
+                    }
+                }
             }
         }
 
