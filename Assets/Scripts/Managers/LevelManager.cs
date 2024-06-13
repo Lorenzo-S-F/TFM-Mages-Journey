@@ -148,7 +148,7 @@ public class LevelManager : MonoBehaviour
 
     public void RemoveItemFormPool(Item item)
     {
-        m_AvaliableItems.RemoveAll(x => x.Value == item);
+        m_AvaliableItems.RemoveAll(x => x.Value.name == item.name);
     }
 
     public (RoomManager, MapNode) GetRoom(int room)
