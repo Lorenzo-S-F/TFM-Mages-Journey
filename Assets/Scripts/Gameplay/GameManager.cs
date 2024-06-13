@@ -74,9 +74,15 @@ public class GameManager : MonoBehaviour
             if (m_PlayerBase == null)
             {
                 m_RoomStarted = false;
+                GameplayManagers.Instance.m_TimeMultiplier = 0;
                 PopupsManager.Instance.TryOpenPopup(PopupsManager.POPUPS.LOSE);
             }
         }
+    }
+
+    public void SetOccupation(Vector2Int pos, bool value)
+    {
+        m_OccupationData[pos.x, pos.y] = value;
     }
 
     internal int GetPlayerGold()
@@ -245,15 +251,17 @@ public class GameManager : MonoBehaviour
     private IEnumerator SlowTimeCoroutine()
     {
         m_PlayerBase.SetPerfectDashing(true);
+        m_GameplayManagers.m_TimeMultiplier = m_SlowTimeMultiplier;
+
+        yield return new WaitForSeconds(m_ExtraSlowTime);
+
         float t = 0;
         while (t < m_LerpSlowTime)
         {
             t += Time.deltaTime;
-            m_GameplayManagers.m_TimeMultiplier = Mathf.Lerp(1, m_SlowTimeMultiplier, t / m_LerpSlowTime);
+            m_GameplayManagers.m_TimeMultiplier = Mathf.Lerp(m_SlowTimeMultiplier, 1, t / m_LerpSlowTime);
             yield return null;
         }
-
-        yield return new WaitForSeconds(m_ExtraSlowTime);
 
         m_GameplayManagers.m_TimeMultiplier = 1;
         m_PlayerBase.SetPerfectDashing(false);

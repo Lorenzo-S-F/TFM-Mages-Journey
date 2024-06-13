@@ -12,6 +12,12 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
     private float m_ClickCooldown;
     private bool m_BufferedShot;
     private Vector2Int m_BufferedDash = Vector2Int.zero;
+    private GameplayManagers m_GameplayManagers;
+
+    private void Awake()
+    {
+        m_GameplayManagers = GameplayManagers.Instance;
+    }
 
     public void SetPlayer(Player player)
     {
@@ -90,11 +96,11 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (Time.time - m_ClickCooldown > 0.08f)
+        if (Time.time - m_ClickCooldown > 0.08f * (m_GameplayManagers.m_TimeMultiplier / m_GameplayManagers.m_TimeMultiplier))
         {
             if (Time.time < m_ClickCooldown)
             {
-                m_ClickCooldown = Time.time + 0.2f;
+                m_ClickCooldown = Time.time + 0.2f * (m_GameplayManagers.m_TimeMultiplier/ m_GameplayManagers.m_TimeMultiplier);
                 m_PlayerReference.Shoot();
                 m_BufferedShot = false;
             }
@@ -110,8 +116,8 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
         if (m_PlayerReference == null)
             return;
 
-        if (m_BufferedShot && Time.time - m_ClickDownTime > 0.04f)
-        {
+        if (m_BufferedShot && Time.time - m_ClickDownTime > 0.04f * (m_GameplayManagers.m_TimeMultiplier / m_GameplayManagers.m_TimeMultiplier)) 
+        { 
             m_ClickDownTime = Time.time + 0.2f;
             m_PlayerReference.Shoot();
             m_BufferedShot = false;

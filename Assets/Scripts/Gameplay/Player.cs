@@ -42,7 +42,12 @@ public class Player : BoardElement
     private void Update()
     {
         if (m_ShootCooldown > 0)
-            m_ShootCooldown -= Time.deltaTime * m_GameplayManagers.m_TimeMultiplier;
+        {
+            if (m_PerfectDashing)
+                m_ShootCooldown -= Time.deltaTime * 2;                
+            else
+                m_ShootCooldown -= Time.deltaTime * m_GameplayManagers.m_TimeMultiplier;
+        }
     }
 
     public EntityStats GetPlayerStats()
@@ -154,6 +159,9 @@ public class Player : BoardElement
         if (!m_PerfectDashing && (m_Dashing || m_Transform == null))
             return;
 
+        if (m_PerfectDashing)
+            Debug.Log("Bullet shot");
+
         Vector2Int dir = m_GameManager.GetMostAlignedDirection(this);
 
         StartCoroutine(ShotSystem.ShootPattern(
@@ -191,21 +199,28 @@ public class Player : BoardElement
             yield break;
 
         m_DashEffect.Play();
-
         m_DashTimeInmunnity = Time.time + ((1.0f / m_CurrentEntityStats.m_Speed) * 0.8f);
-
-        m_CurrentPlayerEntity.m_Position += _direction;
         m_Dashing = true;
+
+        GameplayManagers.Instance.m_GameManager.SetOccupation(m_CurrentPlayerEntity.m_Position + _direction, true);
 
         Vector3 startPosition = m_Transform.localPosition;
         float t = 0;
         float smoothValue;
+        bool directionSet = false;
 
         while (t < 1)
         {
             yield return null;
 
             t += Time.deltaTime * m_CurrentEntityStats.m_Speed * m_GameplayManagers.m_TimeMultiplier;
+
+            if (t >= 0.5 && !directionSet)
+            {
+                directionSet = true;
+                m_CurrentPlayerEntity.m_Position += _direction;
+                GameplayManagers.Instance.m_GameManager.SetOccupation(m_CurrentPlayerEntity.m_Position, false);
+            }
 
             smoothValue = Mathf.SmoothStep(0, 1, t);
             m_Transform.localPosition = startPosition + new Vector3(_direction.x * smoothValue, _direction.y * smoothValue, 0);

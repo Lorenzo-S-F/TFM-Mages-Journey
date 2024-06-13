@@ -1449,9 +1449,9 @@ MonoBehaviour:
   m_AutoAimPanel: 0
   m_ManualAimPanel: 0
   m_PlayerBase: {fileID: 2097542885}
-  m_LerpSlowTime: 0.1
-  m_ExtraSlowTime: 0.1
-  m_SlowTimeMultiplier: 0.3
+  m_LerpSlowTime: 0.2
+  m_ExtraSlowTime: 0.3
+  m_SlowTimeMultiplier: 0.1
 --- !u!1 &807645010
 GameObject:
   m_ObjectHideFlags: 0

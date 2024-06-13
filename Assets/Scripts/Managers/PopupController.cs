@@ -15,6 +15,7 @@ public class PopupController : MonoBehaviour
     [SerializeField]
     private Slider m_BackSlider;
 
+    private float m_PreviousGameplayTime = 1;
     public GameObject m_GameplayExtraButton;
 
     private void Awake()
@@ -46,6 +47,7 @@ public class PopupController : MonoBehaviour
         {
             if (m_GameplayExtraButton != null)
                 m_GameplayExtraButton.SetActive(true);
+            m_PreviousGameplayTime = manager.m_TimeMultiplier;
             manager.m_TimeMultiplier = 0;
         }
         else
@@ -100,7 +102,7 @@ public class PopupController : MonoBehaviour
             m_GameplayExtraButton.SetActive(true);
 
         if (manager != null)
-            manager.m_TimeMultiplier = 1;
+            manager.m_TimeMultiplier = m_PreviousGameplayTime;
 
         m_PopupCanvas.blocksRaycasts = false;
         m_PopupCanvas.interactable = false;
