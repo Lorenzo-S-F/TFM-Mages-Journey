@@ -382,34 +382,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterShadow
       objectReference: {fileID: 0}
-    - target: {fileID: 7733711827576999028, guid: ffceebc9501de654398c80995eca94a2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.ctime1
-      value: 64957
-      objectReference: {fileID: 0}
-    - target: {fileID: 7733711827576999028, guid: ffceebc9501de654398c80995eca94a2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.b
-      value: 0.8301887
-      objectReference: {fileID: 0}
-    - target: {fileID: 7733711827576999028, guid: ffceebc9501de654398c80995eca94a2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.g
-      value: 0.8301887
-      objectReference: {fileID: 0}
-    - target: {fileID: 7733711827576999028, guid: ffceebc9501de654398c80995eca94a2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.r
-      value: 0.8301887
-      objectReference: {fileID: 0}
-    - target: {fileID: 7733711827576999028, guid: ffceebc9501de654398c80995eca94a2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7733711827576999028, guid: ffceebc9501de654398c80995eca94a2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7733711827576999028, guid: ffceebc9501de654398c80995eca94a2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.r
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

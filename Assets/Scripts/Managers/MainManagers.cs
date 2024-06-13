@@ -9,6 +9,11 @@ public class MainManagers : Singleton<MainManagers>
 
     public int m_SelectedPlayerCharacter = 0;
 
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
+
     public void SetSelectedCharacter(int value)
     {
         m_SelectedPlayerCharacter = value;
