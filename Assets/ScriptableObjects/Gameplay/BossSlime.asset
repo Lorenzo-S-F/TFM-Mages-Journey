@@ -20,7 +20,7 @@ MonoBehaviour:
     m_ShotSpeed: 5
     m_Damage: 2
     m_Speed: 1.5
-    m_HP: 20
+    m_HP: 25
   m_AttackData:
   - m_AttackPattern:
       m_Directions:

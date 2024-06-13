@@ -639,6 +639,33 @@ MonoBehaviour:
         m_Type: 4
       m_StartingItems:
       - {fileID: 11400000, guid: 7273e870ba676dd4783813d432969526, type: 2}
+  - Key: 0
+    Value:
+      m_PlayerEntity:
+        m_EntityGameObject: {fileID: 7720882008101063579, guid: e414b5d3fed490245971fd53e8568989, type: 3}
+        m_Position: {x: 0, y: 0}
+        m_Entity: {fileID: 11400000, guid: 9546ab883d85d224cb0c41d55a7ce02f, type: 2}
+        m_Type: 4
+      m_StartingItems:
+      - {fileID: 11400000, guid: b34e061112820a540b6cd754365bb144, type: 2}
+  - Key: 0
+    Value:
+      m_PlayerEntity:
+        m_EntityGameObject: {fileID: 7720882008101063579, guid: 99dfce7965cec52418d6a6197fc10e36, type: 3}
+        m_Position: {x: 0, y: 0}
+        m_Entity: {fileID: 11400000, guid: 48b556a70a5972b46b95f882b5e73ae1, type: 2}
+        m_Type: 4
+      m_StartingItems:
+      - {fileID: 11400000, guid: 875d17cbd29c6384b889f9d7df1afaa8, type: 2}
+  - Key: 0
+    Value:
+      m_PlayerEntity:
+        m_EntityGameObject: {fileID: 7720882008101063579, guid: 1948b65361efc5e43a9d870284550763, type: 3}
+        m_Position: {x: 0, y: 0}
+        m_Entity: {fileID: 11400000, guid: 90902c5035157e84eaaa9528081eb6c4, type: 2}
+        m_Type: 4
+      m_StartingItems:
+      - {fileID: 11400000, guid: 8cc52b4de8e55714d8928e3a27b2d0e2, type: 2}
   m_EnemyRooms:
   - Key: 0
     Value: {fileID: 8584483960725546956, guid: b91823a96bd8985429aa75fa8e0db4f1, type: 3}
@@ -691,7 +718,7 @@ MonoBehaviour:
     - Key: 3
       Value: 2
   m_MapSizeX: 5
-  m_MapSizeY: 8
+  m_MapSizeY: 10
 --- !u!1001 &359737926
 PrefabInstance:
   m_ObjectHideFlags: 0

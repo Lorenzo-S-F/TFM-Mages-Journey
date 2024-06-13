@@ -15,10 +15,10 @@ MonoBehaviour:
   m_Text: Basic attack is changed by two consecutive shots
   m_ItemSprite: {fileID: 934351758, guid: 80cefab8dd4ddb64aa6df158d702ab48, type: 3}
   m_PlaneStatModifiers:
-    m_AttackProjectileTime: 4
+    m_AttackProjectileTime: 0
     m_AttackSpeed: 0
     m_ShotSpeed: 0
-    m_Damage: 0
+    m_Damage: -0.3
     m_Speed: 0
     m_HP: 0
   m_HealAmount: 0
@@ -51,4 +51,4 @@ MonoBehaviour:
       m_RepeatInterval: 0
     m_Projectile: {fileID: 0}
     m_ThrowType: 0
-  m_ItemType: 03000000
+  m_ItemType: 0300000001000000

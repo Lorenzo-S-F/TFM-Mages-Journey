@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b93e0150f2cab7f46a1b5f8268704ab5, type: 3}
-  m_Name: Player
+  m_Name: PlayerGreen
   m_EditorClassIdentifier: 
   m_ShootSound: {fileID: 8300000, guid: 1f403604eb5765d4e86b6b35afdbc560, type: 3}
   m_DamageSound: {fileID: 8300000, guid: a5bd54a867d490d4c8819f1cafae84b7, type: 3}
   m_EntityStats:
     m_AttackProjectileTime: 4
     m_AttackSpeed: 1.6
-    m_ShotSpeed: 4
-    m_Damage: 1
-    m_Speed: 5
+    m_ShotSpeed: 6
+    m_Damage: 1.25
+    m_Speed: 4
     m_HP: 10
   m_AttackData:
   - m_AttackPattern:
@@ -34,6 +34,10 @@ MonoBehaviour:
       m_RepeatInterval: 0
     m_Projectile: {fileID: 5085270326753100309, guid: fc411545af0b6cd40a33dd0bb13d015c, type: 3}
     m_ThrowType: 1
+  m_ExtraSizeXPos: 0
+  m_ExtraSizeXNeg: 0
+  m_ExtraSizeYPos: 0
+  m_ExtraSizeYNeg: 0
   m_IdleTimeAfterMove: 0
   m_AttackRate: 0
   m_MoveRate: 0

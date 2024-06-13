@@ -6,6 +6,7 @@ public class MenusUIManager : MonoBehaviour
 {
     public void OnPlayButtonClicked()
     {
+        PlayerPrefs.SetInt("SelectedCharacter", MainManagers.Instance.m_SelectedPlayerCharacter);
         MainManagers.Instance.m_LoadingHandler.LoadScene(LoadingHandler.SCENE.GAMEPLAY);
     }
 
