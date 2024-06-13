@@ -43,5 +43,5 @@ MonoBehaviour:
   m_MoveRate: 0
   m_IdleRate: 0
   m_IdleTime: 0
-  m_GoldOnDeath: 1
+  m_GoldOnDeath: 2
   m_AttackModifications: []
