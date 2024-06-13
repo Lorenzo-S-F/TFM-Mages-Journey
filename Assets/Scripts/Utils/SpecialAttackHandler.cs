@@ -62,6 +62,9 @@ public class SpecialAttackHandler : MonoBehaviour
         if (m_InCooldown)
             return;
 
+        if (m_PlayerReference.IsDashing() && !m_PlayerReference.IsPerfectDashing())
+            return;
+
         m_PlayerReference.ShootSpecialAttack();
         m_AttackCooldown = 10;
         m_InCooldown = true;

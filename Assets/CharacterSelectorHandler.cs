@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -60,6 +61,12 @@ public class CharacterSelectorHandler : MonoBehaviour
             m_Current--;
 
         SetView(m_Current);
+    }
+
+    public void PlayRandom()
+    {
+        SetView(RandomNumberGenerator.GetInt32(0, m_MagesData.Count));
+        MainManagers.Instance.m_LoadingHandler.LoadScene(LoadingHandler.SCENE.GAMEPLAY);
     }
 
 }

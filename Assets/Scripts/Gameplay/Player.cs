@@ -138,6 +138,11 @@ public class Player : BoardElement
         return false;
     }
 
+    public bool IsPerfectDashing()
+    {
+        return m_PerfectDashing;
+    }
+
     public void SetPerfectDashing(bool value)
     {
         m_PerfectDashing = value;
