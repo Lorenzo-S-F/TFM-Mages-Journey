@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 82a07a9d9cfaf50438c370b5fb8f2c78
+guid: 615f0e28c5309ad45adac7577619ccf7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MainCharacter_0
+      name: SlimeEnemyKing_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,20 +137,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 18586a5a05578dd428b7bd2fab9fb519
-      internalID: -1196563131
+      spriteID: 9be08e5ee4fadf541a10e55f56970191
+      internalID: -1012864941
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MainCharacter_1
+      name: SlimeEnemyKing_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 64
         y: 0
-        width: 32
-        height: 32
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -158,8 +158,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0a4863056fb31634ca32fddae2265cf1
-      internalID: 1957422052
+      spriteID: 66a98e33706e1c14e92f9dbe1a23c4d0
+      internalID: 314033838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SlimeEnemyKing_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ca4f19be8ca43b44972adffba6072f4
+      internalID: -1482458343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SlimeEnemyKing_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58a53dd3d1d8f50479816a00ecd0725b
+      internalID: 1341035441
       vertices: []
       indices: 
       edges: []
@@ -175,8 +217,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      MainCharacter_0: -1196563131
-      MainCharacter_1: 1957422052
+      SlimeEnemyKing_0: -1012864941
+      SlimeEnemyKing_1: 314033838
+      SlimeEnemyKing_2: -1482458343
+      SlimeEnemyKing_3: 1341035441
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
