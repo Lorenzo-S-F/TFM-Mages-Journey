@@ -15,7 +15,9 @@ public class PopupsManager : Singleton<PopupsManager>
     {
         UNDEFINED = 0,
         SETTINGS = 1,
-        TUTORIAL_GAMEPLAY = 2
+        TUTORIAL_GAMEPLAY = 2,
+        WIN,
+        LOSE
     }
 
     public void TryOpenButtonCall(int popup)

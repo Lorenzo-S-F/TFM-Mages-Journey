@@ -53,9 +53,16 @@ public class GameManager : MonoBehaviour
         if (m_RoomStarted && (m_CurrentRoom.GetRoomType() == LevelManager.MapNode.ROOM_TYPE.ENEMY || m_CurrentRoom.GetRoomType() == LevelManager.MapNode.ROOM_TYPE.BOSS))
         {
             int entity = m_BoardElements.FindIndex(x => x != null && x.GetElementType() == BoardElement.ELEMENT_TYPE.ENEMY);
-            if (entity == -1)
+            if (entity == -1 && m_PlayerBase != null)
             {
                 m_RoomStarted = false;
+                if (m_CurrentRoom.GetRoomType() == LevelManager.MapNode.ROOM_TYPE.BOSS)
+                {
+                    PopupsManager.Instance.TryOpenPopup(PopupsManager.POPUPS.WIN);
+                    m_RoomStarted = false;
+                    return;
+                }
+
                 StartCoroutine(GameplayManagers.Instance.ShowNextRoomOptions());
 
                 foreach (Transform projectile in m_ProjectilesTransform)
@@ -65,7 +72,10 @@ public class GameManager : MonoBehaviour
             }
 
             if (m_PlayerBase == null)
-                MainManagers.Instance.m_LoadingHandler.LoadScene(LoadingHandler.SCENE.MENUS);
+            {
+                m_RoomStarted = false;
+                PopupsManager.Instance.TryOpenPopup(PopupsManager.POPUPS.LOSE);
+            }
         }
     }
 

@@ -23,17 +23,19 @@ public class PopupController : MonoBehaviour
         m_PopupCanvas.interactable = false;
         m_PopupCanvas.blocksRaycasts = false;
 
-        if (m_PopupType == PopupsManager.POPUPS.SETTINGS)
+        switch (m_PopupType)
         {
-            m_SFXSlider.minValue = 0;
-            m_SFXSlider.maxValue = 1;
-            m_SFXSlider.wholeNumbers = false;
-            m_SFXSlider.value = PlayerPrefs.GetFloat("SFX_Volume", 0.6f);
+            case PopupsManager.POPUPS.SETTINGS:
+                m_SFXSlider.minValue = 0;
+                m_SFXSlider.maxValue = 1;
+                m_SFXSlider.wholeNumbers = false;
+                m_SFXSlider.value = PlayerPrefs.GetFloat("SFX_Volume", 0.6f);
 
-            m_BackSlider.minValue = 0;
-            m_BackSlider.maxValue = 1;
-            m_BackSlider.wholeNumbers = false;
-            m_BackSlider.value = PlayerPrefs.GetFloat("Music_Volume", 0.45f);
+                m_BackSlider.minValue = 0;
+                m_BackSlider.maxValue = 1;
+                m_BackSlider.wholeNumbers = false;
+                m_BackSlider.value = PlayerPrefs.GetFloat("Music_Volume", 0.45f);
+                break;
         }
     }
 

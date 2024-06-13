@@ -60,10 +60,10 @@ public class LevelManager : MonoBehaviour
         // One item rooms
         int generated = 0;
         List<int> usedY = new List<int>();
-        while (generated < 2)
+        while (generated < 1)
         {
             int x = RandomNumberGenerator.GetInt32(0, m_MapSizeX);
-            int y = RandomNumberGenerator.GetInt32(1, m_MapSizeY - 1);
+            int y = RandomNumberGenerator.GetInt32(2, m_MapSizeY - 1);
             if (m_Map[x,y] == null)
             {
                 MapNode newNode = new MapNode();
@@ -77,7 +77,7 @@ public class LevelManager : MonoBehaviour
 
         // One shop rooms
         generated = 0;
-        while (generated < 2)
+        while (generated < 1)
         {
             int x = RandomNumberGenerator.GetInt32(0, m_MapSizeX);
             int y = RandomNumberGenerator.GetInt32(3, m_MapSizeY - 1);
@@ -93,11 +93,17 @@ public class LevelManager : MonoBehaviour
             }
         }
 
+        MapNode fixedEasyRoom = new MapNode();
+        fixedEasyRoom.m_Rarity = MapNode.RARITY.EASY;
+        fixedEasyRoom.m_RoomType = MapNode.ROOM_TYPE.ENEMY;
+        fixedEasyRoom.m_PrevNodes = new List<MapNode>() { start };
+        m_Map[2, 1] = fixedEasyRoom;
+
         // Random Generation
         for (int i = 0; i < m_MapSizeX; ++i)
         {
-            MapNode prev = start;
-            for (int j = 1; j < m_MapSizeY - 1; ++j)
+            MapNode prev = fixedEasyRoom;
+            for (int j = 2; j < m_MapSizeY - 1; ++j)
             {
                 if (!m_GenerationSpecs.RoomGenerated())
                     continue;
@@ -186,12 +192,6 @@ public class LevelManager : MonoBehaviour
     public List<MapNode> GetNextLayerMapNodes()
     {
         List<MapNode> nextMapNodes = new List<MapNode>();
-
-        if (m_Map.GetLength(1) == m_CurrentGameLayer + 1)
-        {
-            MainManagers.Instance.m_LoadingHandler.LoadScene(LoadingHandler.SCENE.MENUS);
-            return nextMapNodes;
-        }
 
         while (nextMapNodes.Count == 0)
         {

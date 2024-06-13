@@ -294,7 +294,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: To Dash, you can drag over the pad to the desired direction
+  m_text: To Dash, you can drag on the pad to the desired direction
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a37aec88d871fd429546c0ea4a871cf, type: 2}
   m_sharedMaterial: {fileID: -1186808742298158028, guid: 8a37aec88d871fd429546c0ea4a871cf, type: 2}
@@ -863,7 +863,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: After each room, you choose your next room with cerain difficulty (E,N,H).
+  m_text: After each room, you choose the next one with cerain difficulty (Easy,
+    Normal, Hard)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a37aec88d871fd429546c0ea4a871cf, type: 2}
   m_sharedMaterial: {fileID: -1186808742298158028, guid: 8a37aec88d871fd429546c0ea4a871cf, type: 2}
@@ -890,8 +891,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
