@@ -15,6 +15,8 @@ public class Player : BoardElement
     private GoldHandler m_GoldHandler;
     [SerializeField]
     private SpecialAttackHandler m_SpecialAttackHandler;
+    [SerializeField]
+    private AudioClip m_DashAudio;
 
     private GameplayManagers m_GameplayManagers;
     private RoomEntity m_CurrentPlayerEntity;
@@ -139,6 +141,7 @@ public class Player : BoardElement
         Vector2Int dir = m_GameManager.GetMostAlignedDirection(this);
 
         StartCoroutine(ShotSystem.ShootPattern(
+            m_CurrentPlayerEntity.m_Entity.m_ShootSound,
             attackData.m_AttackPattern,
             m_CurrentPlayerEntity.m_Entity.m_AttackData[0].m_Projectile,
             this,
@@ -161,6 +164,7 @@ public class Player : BoardElement
         Vector2Int expectedDirection = m_CurrentPlayerEntity.m_Position + _direction;
         if (m_GameManager.IsValidPosition(expectedDirection.x, expectedDirection.y))
         {
+            MainManagers.Instance.m_AudioManager.PlaySFXSound(m_DashAudio);
             m_DashCoroutine = StartCoroutine(DashCoroutine(_direction));
         }
     }
@@ -205,6 +209,8 @@ public class Player : BoardElement
 
     public override void ApplyDamage(float damage)
     {
+        MainManagers.Instance.m_AudioManager.PlaySFXSound(m_CurrentPlayerEntity.m_Entity.m_DamageSound);
+
         m_CurrentEntityStats.m_HP -= Mathf.RoundToInt(damage);
         m_HPHandler.ModifyCurrentHP(m_CurrentEntityStats.m_HP);
         if (m_CurrentEntityStats.m_HP <= 0)

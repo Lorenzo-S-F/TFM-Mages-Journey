@@ -22,6 +22,8 @@ public class CommonButtonHandler : Selectable, IPointerClickHandler, IEventSyste
     public UnityEvent m_OnClick;
     [SerializeField]
     private AnimationCurve m_ObjectsCurve;
+    [SerializeField]
+    private AudioClip m_ClickSound;
 
     private Coroutine m_DownCoroutine;
     private Coroutine m_UpCoroutine;
@@ -41,6 +43,7 @@ public class CommonButtonHandler : Selectable, IPointerClickHandler, IEventSyste
     public void OnPointerClick(PointerEventData _eventData)
     {
         m_OnClick?.Invoke();
+        MainManagers.Instance.m_AudioManager.PlaySFXSound(m_ClickSound);
     }
 
     public override void OnPointerDown(PointerEventData _eventData)

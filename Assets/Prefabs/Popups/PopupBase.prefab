@@ -240,6 +240,7 @@ GameObject:
   - component: {fileID: 5970753312471318750}
   - component: {fileID: 4168990700445742915}
   - component: {fileID: 1914041785763412128}
+  - component: {fileID: 7773137336445074684}
   m_Layer: 5
   m_Name: CloseButton
   m_TagString: Untagged
@@ -360,3 +361,28 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7773137336445074684}
+        m_TargetAssemblyTypeName: LocalAudioHandler, Assembly-CSharp
+        m_MethodName: PlaySFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7773137336445074684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9049610059334380641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16a6bd361766d0647a370decfab13323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SoundReference: {fileID: 8300000, guid: fb2941ae15ddcea49a5c839276d906e4, type: 3}

@@ -435,7 +435,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 94.3
+  m_fontSize: 101.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -682,6 +682,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ButtonArrowLeft
       objectReference: {fileID: 0}
+    - target: {fileID: 3111275411385703834, guid: 3a8d6bbc376256a4ea307e758ae0d41f, type: 3}
+      propertyPath: m_ClickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 750d6d84fe4a7ec4bb385d4b0bf08f55, type: 3}
     - target: {fileID: 3111275411385703834, guid: 3a8d6bbc376256a4ea307e758ae0d41f, type: 3}
       propertyPath: m_OnClickSprites.Array.data[0]
       value: 
@@ -2346,7 +2350,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 94.3
+  m_fontSize: 101.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2588,6 +2592,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ButtonArrowRight
       objectReference: {fileID: 0}
+    - target: {fileID: 3111275411385703834, guid: 3a8d6bbc376256a4ea307e758ae0d41f, type: 3}
+      propertyPath: m_ClickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 750d6d84fe4a7ec4bb385d4b0bf08f55, type: 3}
     - target: {fileID: 3111275411385703834, guid: 3a8d6bbc376256a4ea307e758ae0d41f, type: 3}
       propertyPath: m_OnClickSprites.Array.data[0]
       value: 

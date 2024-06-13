@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8796976441471374735}
   - component: {fileID: 3749282927151523779}
   - component: {fileID: 5146230438815202902}
+  - component: {fileID: 581600635113613592}
   m_Layer: 5
   m_Name: RoomSelector
   m_TagString: Untagged
@@ -95,6 +96,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.16
+--- !u!114 &581600635113613592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659828049708930078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16a6bd361766d0647a370decfab13323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SoundReference: {fileID: 8300000, guid: fb2941ae15ddcea49a5c839276d906e4, type: 3}
 --- !u!1 &2830275544084620806
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,4 +362,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 925895444062931982}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 581600635113613592}
+        m_TargetAssemblyTypeName: LocalAudioHandler, Assembly-CSharp
+        m_MethodName: PlaySFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

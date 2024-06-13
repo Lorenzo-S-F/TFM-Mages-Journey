@@ -10,6 +10,11 @@ public class PopupController : MonoBehaviour
     public float m_AnimationSpeed = 1;
     public float m_ResizeScale = 1;
 
+    [SerializeField]
+    private Slider m_SFXSlider;
+    [SerializeField]
+    private Slider m_BackSlider;
+
     public GameObject m_GameplayExtraButton;
 
     private void Awake()
@@ -17,6 +22,19 @@ public class PopupController : MonoBehaviour
         m_PopupCanvas.alpha = 0;
         m_PopupCanvas.interactable = false;
         m_PopupCanvas.blocksRaycasts = false;
+
+        if (m_PopupType == PopupsManager.POPUPS.SETTINGS)
+        {
+            m_SFXSlider.minValue = 0;
+            m_SFXSlider.maxValue = 1;
+            m_SFXSlider.wholeNumbers = false;
+            m_SFXSlider.value = PlayerPrefs.GetFloat("SFX_Volume", 0.6f);
+
+            m_BackSlider.minValue = 0;
+            m_BackSlider.maxValue = 1;
+            m_BackSlider.wholeNumbers = false;
+            m_BackSlider.value = PlayerPrefs.GetFloat("Music_Volume", 0.45f);
+        }
     }
 
     public void OnEntry()
@@ -85,5 +103,17 @@ public class PopupController : MonoBehaviour
         m_PopupCanvas.blocksRaycasts = false;
         m_PopupCanvas.interactable = false;
         PopupsManager.Instance.ClosePopup();
+    }
+
+    public void OnSFXValueChanged(float value)
+    {
+        MainManagers.Instance.m_AudioManager.SetSFXVolume(value);
+        PlayerPrefs.SetFloat("SFX_Volume", value);
+    }
+
+    public void OnBackgroundValueChanged(float value)
+    {
+        MainManagers.Instance.m_AudioManager.SetBackgroundVolume(value);
+        PlayerPrefs.SetFloat("Music_Volume", value);
     }
 }

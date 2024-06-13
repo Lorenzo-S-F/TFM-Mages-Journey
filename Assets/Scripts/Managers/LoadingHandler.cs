@@ -16,6 +16,9 @@ public class LoadingHandler : MonoBehaviour
     private bool m_LoadingScene;
     private string m_CurrentSceneLoaded = string.Empty;
 
+    [SerializeField]
+    private AudioClip m_MenusMusic;
+
     private void Awake()
     {
         m_LoadingScene = true;
@@ -85,6 +88,7 @@ public class LoadingHandler : MonoBehaviour
                 yield return GameplayManagers.Instance.Initialize();
                 break;
             case SCENE.MENUS:
+                StartCoroutine(MainManagers.Instance.m_AudioManager.FadeBackgroundInto(m_MenusMusic, 0.5f));
                 MenusManagers.Instance.m_MenusCamera.gameObject.SetActive(true);
                 yield return MenusManagers.Instance.Initialize();
                 break;

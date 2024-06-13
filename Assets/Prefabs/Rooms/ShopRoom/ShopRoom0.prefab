@@ -847,7 +847,7 @@ MonoBehaviour:
   - {fileID: 8308554098971198377}
   m_PlayerTransform: {fileID: 2817159696063295656}
   m_GridTransform: {fileID: 2817159696063295656}
-  m_RoomType: 3
+  m_RoomType: 1
 --- !u!1 &6520918189162626541
 GameObject:
   m_ObjectHideFlags: 0

@@ -30,6 +30,7 @@ public class Enemy : BoardElement
     public override void ApplyDamage(float damage)
     {
         m_CurrentRoomEntity.m_Entity.m_EntityStats.m_HP -= Mathf.RoundToInt(damage);
+        MainManagers.Instance.m_AudioManager.PlaySFXSound(m_CurrentRoomEntity.m_Entity.m_DamageSound);
         if (m_CurrentRoomEntity.m_Entity.m_EntityStats.m_HP <= 0)
         {
             GameplayManagers.Instance.m_GameManager.AddGoldToPlayer(m_CurrentRoomEntity.m_Entity.m_GoldOnDeath);
@@ -130,6 +131,7 @@ public class Enemy : BoardElement
             return;
 
         StartCoroutine(ShotSystem.ShootPattern(
+            m_CurrentRoomEntity.m_Entity.m_ShootSound,
             m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot].m_AttackPattern,
             m_CurrentRoomEntity.m_Entity.m_AttackData[selectedShot].m_Projectile,
             this,

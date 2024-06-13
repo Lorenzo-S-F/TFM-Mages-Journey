@@ -12,6 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b93e0150f2cab7f46a1b5f8268704ab5, type: 3}
   m_Name: Slime
   m_EditorClassIdentifier: 
+  m_ShootSound: {fileID: 8300000, guid: 12834ab66f29c8c4da3bd33447ba9012, type: 3}
+  m_DamageSound: {fileID: 8300000, guid: 12dda58732faeda4f8341bb34c3825bd, type: 3}
+  m_EntityStats:
+    m_AttackProjectileTime: 4
+    m_AttackSpeed: 0.8
+    m_ShotSpeed: 4
+    m_Damage: 1
+    m_Speed: 1.5
+    m_HP: 10
   m_AttackData:
   - m_AttackPattern:
       m_Directions:
@@ -25,13 +34,6 @@ MonoBehaviour:
       m_RepeatInterval: 0
     m_Projectile: {fileID: 5997760887805290216, guid: ea1c615faad6cf9468c9339fef929ec8, type: 3}
     m_ThrowType: 1
-  m_EntityStats:
-    m_AttackProjectileTime: 4
-    m_AttackSpeed: 0.8
-    m_ShotSpeed: 4
-    m_Damage: 1
-    m_Speed: 1.5
-    m_HP: 10
   m_IdleTimeAfterMove: 0.5
   m_AttackRate: 1
   m_MoveRate: 1

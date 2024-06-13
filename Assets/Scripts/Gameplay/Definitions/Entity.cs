@@ -6,8 +6,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Entity", menuName = "GameAssets/EntityDef", order = 1)]
 public class Entity : ScriptableObject
 {
-    public List<EntityAttack> m_AttackData;
+    public AudioClip m_ShootSound;
+    public AudioClip m_DamageSound;
     public EntityStats m_EntityStats;
+    public List<EntityAttack> m_AttackData;
 
     public float m_IdleTimeAfterMove;
     public float m_AttackRate;

@@ -29,9 +29,11 @@ public class ShotSystem
 
      */
 
-    public static IEnumerator ShootPattern(Pattern pattern, GameObject projectile, BoardElement parent, Vector2 shootDir, float distanceToEntity, Transform bulletParent, Action<BoardElement, GameObject, float, Transform, Vector3, Vector2Int> instantiateFunc)
+    public static IEnumerator ShootPattern(AudioClip clip, Pattern pattern, GameObject projectile, BoardElement parent, Vector2 shootDir, float distanceToEntity, Transform bulletParent, Action<BoardElement, GameObject, float, Transform, Vector3, Vector2Int> instantiateFunc)
     {
         float angle = Vector2.SignedAngle(Vector2.up, shootDir);
+        AudioManager audioManager = MainManagers.Instance.m_AudioManager;
+        audioManager.PlaySFXSound(clip);
 
         for(int i = 0; i < pattern.m_RepeatAmount; ++i)
         {

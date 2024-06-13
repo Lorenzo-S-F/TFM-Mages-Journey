@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public Transform m_ProjectilesTransform;
     public Transform m_BoardTransform;
 
+    public List<LevelManager.Pair<LevelManager.MapNode.ROOM_TYPE, AudioClip>> m_RoomAudioMapping;
+
     [SerializeField]
     private int m_BoardSizeX;
     [SerializeField]
@@ -244,6 +246,9 @@ public class GameManager : MonoBehaviour
 
     public void SetupRoom(RoomManager roomManager, RoomEntity player, LevelManager.MapNode.RARITY encounterRarity)
     {
+        if (m_CurrentRoom == null || m_CurrentRoom.GetRoomType() != roomManager.GetRoomType())
+            StartCoroutine(MainManagers.Instance.m_AudioManager.FadeBackgroundInto(m_RoomAudioMapping.Find(x => x.Key == roomManager.GetRoomType()).Value, 0.5f));
+
         if (m_CurrentRoom != null)
         {
             Destroy(m_CurrentRoom.gameObject);
