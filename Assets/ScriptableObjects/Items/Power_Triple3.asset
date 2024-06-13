@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fec4b5de5eb3396468bd3b0a71b6aee7, type: 3}
-  m_Name: Power_Triple2
+  m_Name: Power_Triple3
   m_EditorClassIdentifier: 
   m_Text: Your Hability throws 3 projectiles two times.
   m_ItemSprite: {fileID: 845589498, guid: 97e0afe4200371c4aa8931bedeb442a3, type: 3}
@@ -53,7 +53,7 @@ MonoBehaviour:
         m_Disp:
           Key: 0
           Value: 0
-      m_RepeatAmount: 2
+      m_RepeatAmount: 3
       m_RepeatInterval: 0.2
     m_Projectile: {fileID: 5085270326753100309, guid: fc411545af0b6cd40a33dd0bb13d015c, type: 3}
     m_ThrowType: 2

@@ -21,6 +21,7 @@ public class Player : BoardElement
     private GameplayManagers m_GameplayManagers;
     private RoomEntity m_CurrentPlayerEntity;
     private EntityStats m_CurrentEntityStats;
+    private ParticleSystem m_DashEffect;
     private Coroutine m_DashCoroutine;
     private GameManager m_GameManager;
     private Material m_Material;
@@ -104,6 +105,7 @@ public class Player : BoardElement
     {
         m_Transform = playerTransform;
         m_Material = m_Transform.GetChild(0).GetComponent<SpriteRenderer>().material;
+        m_DashEffect = m_Transform.GetComponentInChildren<ParticleSystem>();
     }        
 
     public override void SetPosition(int x, int y)
@@ -182,6 +184,8 @@ public class Player : BoardElement
         if (m_Dashing)
             yield break;
 
+        m_DashEffect.Play();
+
         m_DashTimeInmunnity = Time.time + ((1.0f / m_CurrentEntityStats.m_Speed) * 0.8f);
 
         m_CurrentPlayerEntity.m_Position += _direction;
@@ -205,6 +209,7 @@ public class Player : BoardElement
 
         m_DashCoroutine = null;
         m_Dashing = false;
+        m_DashEffect.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
 
     public override void ApplyDamage(float damage)
