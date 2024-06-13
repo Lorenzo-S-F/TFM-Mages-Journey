@@ -122,10 +122,37 @@ public class GameManager : MonoBehaviour
         SetupRoom(room, player, node.m_Rarity);
     }
 
-    public bool IsValidPosition(int x, int y)
+    public bool IsValidPosition(Entity caller, int x, int y)
     {
-        if (x < 0 || x >= m_BoardSizeX || y < 0 || y >= m_BoardSizeY || m_OccupationData[x, y] || m_BoardElements.FindIndex(element => element != null && element.GetPosition().x == x && element.GetPosition().y == y) != -1)
-            return false;
+        for (int i = x - caller.m_ExtraSizeXNeg; i <= x + caller.m_ExtraSizeXPos; ++i)
+        {
+            for (int j = y - caller.m_ExtraSizeYNeg; j <= y + caller.m_ExtraSizeYPos; ++j)
+            {
+                if (i < 0
+                    || i >= m_BoardSizeX
+                    || j < 0
+                    || j >= m_BoardSizeY
+                    || m_OccupationData[i, j]
+                    || m_BoardElements.FindIndex(
+                       element =>
+                       {
+                           if (element == null)
+                               return false;
+
+                           Entity elementEntity = element.GetEntity();
+
+                           if (elementEntity == caller)
+                               return false;
+
+                           if (i >= (element.GetPosition().x - elementEntity.m_ExtraSizeXNeg) && i <= (element.GetPosition().x + elementEntity.m_ExtraSizeXPos)
+                              && (j >= (element.GetPosition().y - elementEntity.m_ExtraSizeYNeg) && j <= (element.GetPosition().y + elementEntity.m_ExtraSizeYPos)))
+                               return true;
+
+                           return false;
+                       }) != -1)
+                    return false;
+            }
+        }
 
         return true;
     }
@@ -330,4 +357,5 @@ public abstract class BoardElement : MonoBehaviour
     public abstract Vector2Int GetPosition();
     public abstract ELEMENT_TYPE GetElementType();
     public abstract void ApplyDamage(float damage);
+    public abstract Entity GetEntity();
 }

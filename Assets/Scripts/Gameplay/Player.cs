@@ -162,7 +162,7 @@ public class Player : BoardElement
     public void Dash(Vector2Int _direction)
     {
         Vector2Int expectedDirection = m_CurrentPlayerEntity.m_Position + _direction;
-        if (m_GameManager.IsValidPosition(expectedDirection.x, expectedDirection.y))
+        if (m_GameManager.IsValidPosition(m_CurrentPlayerEntity.m_Entity, expectedDirection.x, expectedDirection.y))
         {
             MainManagers.Instance.m_AudioManager.PlaySFXSound(m_DashAudio);
             m_DashCoroutine = StartCoroutine(DashCoroutine(_direction));
@@ -290,5 +290,10 @@ public class Player : BoardElement
         m_Material.SetFloat("_InterpolationValue", 0);
     }
 
-#endregion
+    #endregion
+
+    public override Entity GetEntity()
+    {
+        return m_CurrentPlayerEntity.m_Entity;
+    }
 }

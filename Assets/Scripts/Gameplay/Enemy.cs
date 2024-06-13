@@ -21,10 +21,10 @@ public class Enemy : BoardElement
 
     private void Awake()
     {
-        m_Material = GetComponent<SpriteRenderer>().material;
-        m_GameplayManagers = GameplayManagers.Instance;
         m_GameManager = GameplayManagers.Instance.m_GameManager;
+        m_Material = GetComponent<SpriteRenderer>().material;
         m_PlayerEntity = m_GameManager.GetPlayerEntity();
+        m_GameplayManagers = GameplayManagers.Instance;
     }
 
     public override void ApplyDamage(float damage)
@@ -153,7 +153,7 @@ public class Enemy : BoardElement
     public void Dash(Vector2Int _direction)
     {
         Vector2Int expectedDirection = m_CurrentRoomEntity.m_Position + _direction;
-        if (m_GameManager.IsValidPosition(expectedDirection.x, expectedDirection.y))
+        if (m_GameManager.IsValidPosition(m_CurrentRoomEntity.m_Entity, expectedDirection.x, expectedDirection.y))
             StartCoroutine(DashCoroutine(_direction));
     }
 
@@ -188,5 +188,10 @@ public class Enemy : BoardElement
         m_Material.SetFloat("_InterpolationValue", 1);
         yield return new WaitForSeconds(0.05f);
         m_Material.SetFloat("_InterpolationValue", 0);
+    }
+
+    public override Entity GetEntity()
+    {
+        return m_CurrentRoomEntity.m_Entity;
     }
 }

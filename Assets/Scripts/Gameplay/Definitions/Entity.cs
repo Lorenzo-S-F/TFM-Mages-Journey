@@ -11,6 +11,11 @@ public class Entity : ScriptableObject
     public EntityStats m_EntityStats;
     public List<EntityAttack> m_AttackData;
 
+    public int m_ExtraSizeXPos = 0;
+    public int m_ExtraSizeXNeg = 0;
+    public int m_ExtraSizeYPos = 0;
+    public int m_ExtraSizeYNeg = 0;
+
     public float m_IdleTimeAfterMove;
     public float m_AttackRate;
     public float m_MoveRate;
