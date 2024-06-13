@@ -17,7 +17,7 @@ MonoBehaviour:
   m_EntityStats:
     m_AttackProjectileTime: 4
     m_AttackSpeed: 0.7
-    m_ShotSpeed: 4
+    m_ShotSpeed: 5
     m_Damage: 2
     m_Speed: 1.5
     m_HP: 20
@@ -46,6 +46,30 @@ MonoBehaviour:
       m_RepeatInterval: 0.5
     m_Projectile: {fileID: 5997760887805290216, guid: ea1c615faad6cf9468c9339fef929ec8, type: 3}
     m_ThrowType: 2
+  - m_AttackPattern:
+      m_Directions:
+      - m_Dir:
+          Key: 0
+          Value: 1
+        m_Disp:
+          Key: 0
+          Value: 0
+      - m_Dir:
+          Key: 1
+          Value: 1
+        m_Disp:
+          Key: 0
+          Value: 0
+      - m_Dir:
+          Key: -1
+          Value: 1
+        m_Disp:
+          Key: 0
+          Value: 0
+      m_RepeatAmount: 1
+      m_RepeatInterval: 0.5
+    m_Projectile: {fileID: 5997760887805290216, guid: ea1c615faad6cf9468c9339fef929ec8, type: 3}
+    m_ThrowType: 2
   m_ExtraSizeXPos: 1
   m_ExtraSizeXNeg: 1
   m_ExtraSizeYPos: 1
@@ -54,6 +78,8 @@ MonoBehaviour:
   m_AttackRate: 0.8
   m_MoveRate: 1.5
   m_IdleRate: 1
-  m_IdleTime: 0.75
+  m_IdleTime: 0.5
   m_GoldOnDeath: 1
-  m_AttackModifications: []
+  m_AttackModifications:
+  - m_CheckTime: 1
+    m_Modification: 2
