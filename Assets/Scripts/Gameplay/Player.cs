@@ -26,6 +26,7 @@ public class Player : BoardElement
     private GameManager m_GameManager;
     private Material m_Material;
 
+    private bool m_PerfectDashing = false;
     private bool m_Dashing = false;
     private bool m_Initialized = false;
     private float m_DashTimeInmunnity = 0;
@@ -123,9 +124,22 @@ public class Player : BoardElement
     {
         return ELEMENT_TYPE.PLAYER;
     }
-#endregion
 
-#region PLAYER_ACTIONS
+    internal bool IsDashInmune()
+    {
+        if (m_DashTimeInmunnity > Time.time)
+            return true;
+
+        return false;
+    }
+
+    public void SetPerfectDashing(bool value)
+    {
+        m_PerfectDashing = value;
+    }
+    #endregion
+
+    #region PLAYER_ACTIONS
 
     public void Shoot()
     {
@@ -137,7 +151,7 @@ public class Player : BoardElement
         if (m_ShootCooldown > 0)
             return;
 
-        if (m_Dashing || m_Transform == null)
+        if (!m_PerfectDashing && (m_Dashing || m_Transform == null))
             return;
 
         Vector2Int dir = m_GameManager.GetMostAlignedDirection(this);
@@ -169,14 +183,6 @@ public class Player : BoardElement
             MainManagers.Instance.m_AudioManager.PlaySFXSound(m_DashAudio);
             m_DashCoroutine = StartCoroutine(DashCoroutine(_direction));
         }
-    }
-
-    internal bool IsDashInmune()
-    {
-        if (m_DashTimeInmunnity > Time.time)
-            return true;
-
-        return false;
     }
 
     private IEnumerator DashCoroutine(Vector2Int _direction)

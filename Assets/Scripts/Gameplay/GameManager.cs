@@ -244,6 +244,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SlowTimeCoroutine()
     {
+        m_PlayerBase.SetPerfectDashing(true);
         float t = 0;
         while (t < m_LerpSlowTime)
         {
@@ -255,6 +256,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(m_ExtraSlowTime);
 
         m_GameplayManagers.m_TimeMultiplier = 1;
+        m_PlayerBase.SetPerfectDashing(false);
         m_CurrentSlowTime = null;
     }
 
