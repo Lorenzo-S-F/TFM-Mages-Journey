@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
 {
     private Player m_PlayerReference;
     private Vector2 m_StartDragPos;
+    private Vector2 m_StartClickPos;
     private float m_ClickDownTime;
     private float m_ClickCooldown;
     private bool m_BufferedShot;
@@ -87,6 +88,7 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
     public void OnPointerDown(PointerEventData eventData)
     {
         m_ClickDownTime = Time.time;
+        m_StartClickPos = eventData.pressPosition;
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -96,18 +98,20 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (Time.time - m_ClickCooldown > 0.08f * (m_GameplayManagers.m_TimeMultiplier / m_GameplayManagers.m_TimeMultiplier))
+        Debug.Log(Time.time - m_ClickDownTime);
+
+        if (Time.time - m_ClickDownTime > 0.1 || eventData.dragging)
+            return;
+
+        if (m_ClickCooldown <= 0)
         {
-            if (Time.time < m_ClickCooldown)
-            {
-                m_ClickCooldown = Time.time + 0.2f * (m_GameplayManagers.m_TimeMultiplier/ m_GameplayManagers.m_TimeMultiplier);
-                m_PlayerReference.Shoot();
-                m_BufferedShot = false;
-            }
-            else
-            {
-                m_BufferedShot = true;
-            }
+            m_ClickCooldown = 0.1f * (m_GameplayManagers.m_TimeMultiplier/ m_GameplayManagers.m_TimeMultiplier);
+            m_PlayerReference.Shoot();
+            m_BufferedShot = false;
+        }
+        else
+        {
+            m_BufferedShot = true;
         }
     }
 
@@ -116,9 +120,12 @@ public class PlayerController : MonoBehaviour, IPointerClickHandler, IBeginDragH
         if (m_PlayerReference == null)
             return;
 
-        if (m_BufferedShot && Time.time - m_ClickDownTime > 0.04f * (m_GameplayManagers.m_TimeMultiplier / m_GameplayManagers.m_TimeMultiplier)) 
-        { 
-            m_ClickDownTime = Time.time + 0.2f;
+        if (m_ClickCooldown > 0)
+            m_ClickCooldown -= Time.deltaTime;
+
+        if (m_BufferedShot && m_ClickCooldown <= 0) 
+        {
+            m_ClickCooldown = 0.1f * (m_GameplayManagers.m_TimeMultiplier / m_GameplayManagers.m_TimeMultiplier);
             m_PlayerReference.Shoot();
             m_BufferedShot = false;
         }

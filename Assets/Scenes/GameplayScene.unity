@@ -718,7 +718,7 @@ MonoBehaviour:
     - Key: 3
       Value: 2
   m_MapSizeX: 5
-  m_MapSizeY: 10
+  m_MapSizeY: 6
 --- !u!1001 &359737926
 PrefabInstance:
   m_ObjectHideFlags: 0
