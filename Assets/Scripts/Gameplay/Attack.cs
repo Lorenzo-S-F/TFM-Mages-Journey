@@ -114,14 +114,15 @@ public class Attack : MonoBehaviour
                 ApplyHitEffect(collision.gameObject, (value) => { collision.gameObject.GetComponent<BoardElement>().ApplyDamage(value); });      
             else if (collision.tag == "Player")
             {
-                if (!GameplayManagers.Instance.m_GameManager.m_PlayerBase.IsDashInmune())
+                if (!GameplayManagers.Instance.m_GameManager.m_PlayerBase.IsDashInmune() && !GameplayManagers.Instance.m_GameManager.m_PlayerBase.IsPerfectDashing())
                 {
                     ApplyHitEffect(collision.gameObject, (value) => { GameplayManagers.Instance.m_GameManager.m_PlayerBase.ApplyDamage(value); });
                 }
                 else
                 {
                     m_HitElements.Add(collision.gameObject.GetInstanceID());
-                    m_GameplayManager.m_GameManager.SlowTime();
+                    if (!GameplayManagers.Instance.m_GameManager.m_PlayerBase.IsPerfectDashing())
+                        m_GameplayManager.m_GameManager.SlowTime();
                 }
             }
             else if (

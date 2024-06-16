@@ -11,6 +11,7 @@ public class ItemSlotHandler : MonoBehaviour
     public Item m_ContainedItem;
     private GameplayManagers m_GameplayManager;
     [SerializeField] bool m_IsShop = false;
+    [SerializeField]
     private int m_Price = 5;
     public Collider2D m_ItemCollider;
 
